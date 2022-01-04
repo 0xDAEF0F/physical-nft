@@ -4,16 +4,18 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "format": "yarn run prettier --write 'pages/**/*.{ts,tsx,scss,css,json}'",
+    "format": "yarn run prettier --write 'src/pages/**/*.{ts,tsx,scss,css,json}'",
     "start": "next start",
     "lint": "next lint --ext .js,.jsx,.ts,.tsx",
     "test": "jest --watch",
     "test:ci": "jest --ci"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.7.1",
     "next": "12.0.7",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-redux": "^7.2.6"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
