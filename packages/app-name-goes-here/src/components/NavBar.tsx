@@ -101,7 +101,7 @@ export default function NavBar() {
           leaveFrom='opacity-100 scale-100'
           leaveTo='opacity-0 scale-95'
         >
-          {ref => (
+          {(ref) => (
             <div className='md:hidden text-center' id='mobile-menu'>
               <div
                 ref={ref}
