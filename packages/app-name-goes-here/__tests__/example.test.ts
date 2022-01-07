@@ -1,4 +1,4 @@
-import App from '@/pages/index'
+import App from '@/pages/artists'
 
 describe('something', () => {
   it('sums', () => {
