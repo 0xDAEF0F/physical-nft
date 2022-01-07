@@ -1,21 +1,5 @@
-import type { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
-import TopArtists from '@/components/TopArtists'
-import { fetchArtists } from '@/components/TopArtists'
+import React from 'react'
 
-const Home: NextPage = ({
-  artists,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
-  return <>{/* <TopArtists topArtists={artists} /> */}</>
+export default function index() {
+  return <div>hello world</div>
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  const artists = await fetchArtists()
-  return {
-    props: {
-      artists,
-    },
-    revalidate: 86400,
-  }
-}
-
-export default Home

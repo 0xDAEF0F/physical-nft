@@ -12,26 +12,28 @@ export type Artist = {
   }[]
 }
 
-const topArtistsUrl = `https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&format=json&api_key=${process.env.NEXT_PUBLIC_LASTFM_API_KEY}`
+const getTopArtistsUrl = `https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&format=json&api_key=${process.env.NEXT_PUBLIC_LASTFM_API_KEY}`
+
+export async function fetchArtists() {
+  const response = await axios(getTopArtistsUrl)
+  const artists: Artist[] = response.data.artists.artist
+  return artists
+}
 
 export default function TopArtists({ topArtists }: { topArtists: Artist[] }) {
   const artistHtml = (
-    <div>
+    <div className='pt-6 -z-10'>
       {topArtists?.map((artist, i) => {
         return (
-          <div key={i} className='flex'>
-            <p className='mr-3'>{artist.name}</p>
-            <p>{Number(artist.playcount).toLocaleString()}</p>
+          <div key={i} className='block'>
+            <p className='inline'>{artist.name}</p>
+            <p className='inline ml-3'>
+              Playcount: {Number(artist.playcount).toLocaleString()}
+            </p>
           </div>
         )
       })}
     </div>
   )
   return <div>{artistHtml}</div>
-}
-
-export async function fetchArtists() {
-  const response = await axios(topArtistsUrl)
-  const artists = response.data.artists.artist
-  return artists as Artist[]
 }
