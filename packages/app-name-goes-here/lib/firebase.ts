@@ -1,5 +1,5 @@
 import { getApp, initializeApp } from 'firebase/app'
-import { getAuth, connectAuthEmulator } from 'firebase/auth'
+import { getAuth, connectAuthEmulator, GoogleAuthProvider } from 'firebase/auth'
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -21,6 +21,7 @@ function createFirebaseApp(config: any) {
 }
 
 const firebaseApp = createFirebaseApp(firebaseConfig)
+export const googleProvider = new GoogleAuthProvider()
 export const auth = getAuth(firebaseApp)
 export const firestore = getFirestore(firebaseApp)
 

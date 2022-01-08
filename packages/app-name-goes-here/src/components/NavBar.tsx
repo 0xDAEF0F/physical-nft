@@ -12,7 +12,7 @@ export default function NavBar() {
         <div className='items-center hidden sm:flex pr-5'>
           <DivLink to='/Explore' title='Explore' />
           <DivLink to='/Stats' title='Stats' />
-          <DivLink to='/Account' title='Account' />
+          <DivLink to='/create-account' title='Get Started' xClass='' />
         </div>
         <HamburgerMenu />
       </nav>
