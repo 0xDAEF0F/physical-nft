@@ -1,5 +1,5 @@
 {
-  "name": "app-name-goes-here",
+  "name": "client",
   "private": true,
   "scripts": {
     "build": "next build",
