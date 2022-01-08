@@ -4,6 +4,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "emulators": "firebase emulators:start",
     "format": "yarn run prettier --write 'src/pages/**/*.{ts,tsx,scss,css,json}'",
     "start": "next start",
     "lint": "next lint --ext .js,.jsx,.ts,.tsx",
