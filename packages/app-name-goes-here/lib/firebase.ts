@@ -1,7 +1,6 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
-import { getAnalytics } from 'firebase/analytics'
+import { getApp, initializeApp } from 'firebase/app'
+import { getAuth, connectAuthEmulator } from 'firebase/auth'
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,10 +12,21 @@ const firebaseConfig = {
   measurementId: 'G-XCJMPKK1YL',
 }
 
-const firebaseApp = initializeApp(firebaseConfig)
+function createFirebaseApp(config: any) {
+  try {
+    return getApp()
+  } catch {
+    return initializeApp(config)
+  }
+}
 
-const analytics = getAnalytics(firebaseApp)
-
+const firebaseApp = createFirebaseApp(firebaseConfig)
 export const auth = getAuth(firebaseApp)
 export const firestore = getFirestore(firebaseApp)
+
+if (location.host.includes('localhost')) {
+  connectAuthEmulator(auth, 'http://localhost:9099')
+  connectFirestoreEmulator(firestore, 'localhost', 8080)
+}
+
 export default firebaseApp
