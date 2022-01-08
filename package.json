@@ -1,0 +1,15 @@
+{
+  "name": "physical-nft",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:radaemon/physical-nft.git",
+  "author": "Alejandro M. <amojarrot@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
