@@ -8,7 +8,7 @@
     "format": "yarn run prettier --write 'src/pages/**/*.{ts,tsx,scss,css,json}'",
     "start": "next start",
     "lint": "next lint --ext .js,.jsx,.ts,.tsx",
-    "test": "jest --watch",
+    "test": "jest",
     "test:ci": "jest --ci"
   },
   "dependencies": {
