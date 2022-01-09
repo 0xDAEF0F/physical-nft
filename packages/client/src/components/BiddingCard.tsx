@@ -9,7 +9,7 @@ const products = [
     href: '#',
     imageSrc:
       'https://www.udiscovermusic.com/wp-content/uploads/2018/09/Drake-Nothing-Was-The-Same-deluxe-album-cover-web-optimised-820.jpg',
-    imageAlt: '',
+    imageAlt: 'Drake album',
     price: '100 ETH',
   },
 ]
@@ -24,10 +24,8 @@ const BiddingCard = () => {
               src={product.imageSrc}
               alt={product.imageAlt}
               className='w-full h-full object-center object-cover lg:w-full lg:h-full'
-              width='100%'
-              height='100%'
-              layout='responsive'
-              objectFit='contain'
+              width={300}
+              height={300}
             />
           </div>
           <div className='mt-4 flex justify-between'>
