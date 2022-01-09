@@ -2,6 +2,7 @@ import { Menu, Transition } from '@headlessui/react'
 import React from 'react'
 import { IoMenu } from 'react-icons/io5'
 import DivLink from './DivLink'
+import SearchBar from './SearchBar'
 
 export default function HamburgerMenu() {
   return (
@@ -18,7 +19,15 @@ export default function HamburgerMenu() {
         leaveFrom='transform opacity-100 scale-100'
         leaveTo='transform opacity-0 scale-95'
       >
-        <Menu.Items className='absolute text-center ml-auto mr-auto right-0 mt-1 rounded-md shadow-md ring-opacity-5 w-56'>
+        <Menu.Items className='absolute text-center ml-auto mr-auto right-0 mt-1 rounded-md shadow-md ring-opacity-5 w-full'>
+          <div className='px-1 py-1'>
+            <Menu.Item>
+              <SearchBar
+                placeholder={'Search'}
+                extraClass={'flex justify-center'}
+              />
+            </Menu.Item>
+          </div>
           <div className='px-1 py-1 '>
             <Menu.Item>
               <DivLink title='Explore' to='/explore' />
@@ -26,7 +35,12 @@ export default function HamburgerMenu() {
           </div>
           <div className='px-1 py-1'>
             <Menu.Item>
-              <DivLink title='Account' to='/account' />
+              <DivLink title='Stats' to='/stats' />
+            </Menu.Item>
+          </div>
+          <div className='px-1 py-1'>
+            <Menu.Item>
+              <DivLink title='Get Started' to='/getstarted' />
             </Menu.Item>
           </div>
         </Menu.Items>
