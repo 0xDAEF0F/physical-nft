@@ -7,7 +7,7 @@ export default function NavBar() {
   return (
     <>
       <nav className='flex shadow-md sticky w-full justify-between align-middle h-16'>
-        <AppLogo />
+        <AppLogo extraClass={'px-5'} />
         <SearchBar placeholder='Search' extraClass='hidden md:flex' />
         <div className='items-center hidden md:flex pr-5'>
           <DivLink to='/Explore' title='Explore' />
