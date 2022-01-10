@@ -20,11 +20,11 @@ const products = [
 
 const BiddingCard = () => {
   return (
-    <div className='bg-black rounded-md'>
+    <div className='bg-black rounded-lg'>
       {products.map((product) => (
         <div key={product.id} className='group relative'>
           <div className='flex items-center p-5'>
-            <img
+            <Image
               className='inline-block h-6 w-6 rounded-full ring-'
               src={product.ownerPpSrc}
               alt={product.ownerPpAlt}
@@ -38,12 +38,14 @@ const BiddingCard = () => {
             </p>
           </div>
           <div className='w-full min-h-80 bg-gray-100 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-50 lg:aspect-none'>
-            <img
+            <Image
               src={product.imageSrc}
               alt={product.imageAlt}
               className='w-full h-full object-center object-cover lg:w-full lg:h-full'
-              width={300}
-              height={300}
+              width='100%'
+              height='100%'
+              layout='responsive'
+              objectFit='contain'
             />
           </div>
           <div className='mt-4 flex justify-between'>
