@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-const products = [
+const songs = [
   {
     id: 1,
     name: "Hold On, We're Going Home",
@@ -10,59 +10,70 @@ const products = [
     ownerPpSrc:
       'https://www.cnet.com/a/img/FOblZHSSQ9sBlVbdd0qIxrLRIAI=/940x0/2021/12/13/d319cda7-1ddd-4855-ac55-9dcd9ce0f6eb/unnamed.png',
     ownerPpAlt: 'Drake Profile Picture',
+    ownerHref: '#',
     href: '#',
     imageSrc:
       'https://www.udiscovermusic.com/wp-content/uploads/2018/09/Drake-Nothing-Was-The-Same-deluxe-album-cover-web-optimised-820.jpg',
     imageAlt: 'Drake album',
-    price: '100 ETH',
+    price: '100',
+    time: '12h 30m 50s',
   },
 ]
 
 const BiddingCard = () => {
   return (
-    <div className='bg-black rounded-lg'>
-      {products.map((product) => (
-        <div key={product.id} className='group relative'>
-          <div className='flex items-center p-5'>
-            <Image
-              className='inline-block h-6 w-6 rounded-full ring-'
-              src={product.ownerPpSrc}
-              alt={product.ownerPpAlt}
-              width='100%'
-              height='100%'
-              layout='responsive'
-              objectFit='contain'
-            />
-            <p className='text-md text-gray-200 font-bold pl-2'>
-              {product.owner}
-            </p>
-          </div>
-          <div className='w-full min-h-80 bg-gray-100 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-50 lg:aspect-none'>
-            <Image
-              src={product.imageSrc}
-              alt={product.imageAlt}
-              className='w-full h-full object-center object-cover lg:w-full lg:h-full'
-              width='100%'
-              height='100%'
-              layout='responsive'
-              objectFit='contain'
-            />
-          </div>
-          <div className='mt-4 flex justify-between'>
-            <div className='pl-5'>
-              <a href={product.href}>
-                <span aria-hidden='true' className='absolute inset-0' />
-                <p className='text-md font-extrabold text-white'>
-                  {product.name}
+    <div className='bg-black rounded-lg transform transition duration-500 hover:scale-105'>
+      {songs.map((song) => (
+        <div key={song.id} className='group relative'>
+          <div className='flex p-5'>
+            <a href={song.ownerHref}>
+              <div className='flex center items-center hover:text-gray-800'>
+                <img
+                  className='inline-block h-8 w-8 rounded-full'
+                  src={song.ownerPpSrc}
+                  alt={song.ownerPpAlt}
+                  width='100%'
+                  height='100%'
+                  layout='responsive'
+                  objectFit='contain'
+                />
+                <p className='text-md text-gray-200 font-semibold pl-2'>
+                  {song.owner}
                 </p>
-                <p className='text-sm text-white pb-5'>{product.artist}</p>
-                <p className='text-md text-gray-500'>Current bid</p>
-                <p className='text-sm font-medium text-white pb-5'>
-                  {product.price}
-                </p>
-              </a>
+              </div>
+            </a>
+          </div>
+
+          <a href={song.href}>
+            <div className='w-full min-h-80 bg-gray-100 aspect-w-1 aspect-h-1 overflow-hidden lg:h-50 lg:aspect-none'>
+              <img
+                src={song.imageSrc}
+                alt={song.imageAlt}
+                width='100%'
+                height='100%'
+                layout='responsive'
+                objectFit='contain'
+              />
             </div>
-          </div>
+            <div className='px-5 mt-4 pb-5'>
+              <div className='pb-5'>
+                <p className='text-xl font-extrabold text-white'>{song.name}</p>
+                <p className='text-lg text-white font-light'>{song.artist}</p>
+              </div>
+              <div className='flex justify-between'>
+                <div>
+                  <p className='text-md text-gray-500'>Current bid</p>
+                  <p className='text-sm font-medium text-white'>
+                    {song.price} ETH
+                  </p>
+                </div>
+                <div>
+                  <p className='text-md text-gray-500'>Ending in</p>
+                  <p className='text-sm font-medium text-white'>{song.time}</p>
+                </div>
+              </div>
+            </div>
+          </a>
         </div>
       ))}
     </div>
