@@ -42,10 +42,8 @@ const BiddingCard = () => {
               src={product.imageSrc}
               alt={product.imageAlt}
               className='w-full h-full object-center object-cover lg:w-full lg:h-full'
-              width='100%'
-              height='100%'
-              layout='responsive'
-              objectFit='contain'
+              width={300}
+              height={300}
             />
           </div>
           <div className='mt-4 flex justify-between'>
