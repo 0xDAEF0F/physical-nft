@@ -8,7 +8,7 @@ export default function HamburgerMenu() {
   return (
     <Menu as='div' className='md:hidden'>
       <Menu.Button as='button' className='p-6'>
-        <IoMenu />
+        <IoMenu size={25} />
       </Menu.Button>
       <Transition
         as={React.Fragment}
