@@ -28,7 +28,7 @@ const BiddingCard = () => {
           <div className='flex p-5'>
             <a href={song.ownerHref}>
               <div className='flex center items-center hover:text-gray-800'>
-                <img
+                <Image
                   className='inline-block h-8 w-8 rounded-full'
                   src={song.ownerPpSrc}
                   alt={song.ownerPpAlt}
@@ -46,7 +46,7 @@ const BiddingCard = () => {
 
           <a href={song.href}>
             <div className='w-full min-h-80 bg-gray-100 aspect-w-1 aspect-h-1 overflow-hidden lg:h-50 lg:aspect-none'>
-              <img
+              <Image
                 src={song.imageSrc}
                 alt={song.imageAlt}
                 width='100%'

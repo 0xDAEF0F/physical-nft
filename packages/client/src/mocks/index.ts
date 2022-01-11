@@ -1,4 +1,4 @@
-import { User } from 'src/constants/clientTypes'
+import { User } from '@/constants/index'
 
 export const dummyData: User[] = [
   {

@@ -23,11 +23,11 @@ function createFirebaseApp(config: any) {
 const firebaseApp = createFirebaseApp(firebaseConfig)
 export const googleProvider = new GoogleAuthProvider()
 export const auth = getAuth(firebaseApp)
-export const firestore = getFirestore(firebaseApp)
+export const db = getFirestore(firebaseApp)
 
 if (location.host.includes('localhost')) {
   connectAuthEmulator(auth, 'http://localhost:9099')
-  connectFirestoreEmulator(firestore, 'localhost', 8080)
+  connectFirestoreEmulator(db, 'localhost', 8080)
 }
 
 export default firebaseApp
