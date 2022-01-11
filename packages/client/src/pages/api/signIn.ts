@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { PublicAddress, User } from 'src/constants/clientTypes'
-import { db, auth } from '@/lib/db'
+import { db, auth } from '@/lib/db/index'
 import { dummyData } from '@/lib/mocks'
 
 function createNonce() {
@@ -24,5 +24,5 @@ export default async function handleLogin(
   res: NextApiResponse
 ) {
   const userRef = await addUser(dummyData[0])
-  res.status(200).send(userRef)
+  res.status(200).send(userRef.id)
 }
