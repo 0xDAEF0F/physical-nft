@@ -20,7 +20,7 @@ const songExample = {
 
 const BiddingCard = () => {
   return (
-    <div className='bg-black rounded-lg transform transition duration-500 hover:scale-105 w-fit'>
+    <div className='bg-black rounded-lg transform transition duration-500 hover:scale-105 w-fit '>
       {/* Owner Logo Part */}
       <div key={songExample.id} className='group relative'>
         <div className='flex p-3'>
@@ -39,40 +39,42 @@ const BiddingCard = () => {
             </div>
           </a>
         </div>
-        {/* main image part */}
-        <Image
-          priority
-          src={songExample.imageSrc}
-          alt={songExample.imageAlt}
-          width={350}
-          height={350}
-          layout='intrinsic'
-        />
-        {/* Footer Part */}
-        <div className='px-5 mt-4 pb-5'>
-          <div className='pb-5'>
-            <p className='text-xl font-extrabold text-white'>
-              {songExample.name}
-            </p>
-            <p className='text-lg text-white font-light'>
-              {songExample.artist}
-            </p>
-          </div>
-          <div className='flex justify-between'>
-            <div>
-              <p className='text-md text-gray-500'>Current bid</p>
-              <p className='text-sm font-medium text-white'>
-                {songExample.price} ETH
+        <a href={songExample.href}>
+          {/* main image part */}
+          <Image
+            priority
+            src={songExample.imageSrc}
+            alt={songExample.imageAlt}
+            width={350}
+            height={350}
+            layout='intrinsic'
+          />
+          {/* Footer Part */}
+          <div className='px-5 mt-4 pb-5'>
+            <div className='pb-5'>
+              <p className='text-xl font-extrabold text-white'>
+                {songExample.name}
+              </p>
+              <p className='text-lg text-white font-light'>
+                {songExample.artist}
               </p>
             </div>
-            <div>
-              <p className='text-md text-gray-500'>Ending in</p>
-              <p className='text-sm font-medium text-white'>
-                {songExample.time}
-              </p>
+            <div className='flex justify-between'>
+              <div>
+                <p className='text-md text-gray-500'>Current bid</p>
+                <p className='text-sm font-medium text-white'>
+                  {songExample.price} ETH
+                </p>
+              </div>
+              <div>
+                <p className='text-md text-gray-500'>Ending in</p>
+                <p className='text-sm font-medium text-white'>
+                  {songExample.time}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   )
