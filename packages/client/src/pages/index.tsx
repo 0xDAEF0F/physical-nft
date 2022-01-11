@@ -5,7 +5,7 @@ import Footer from '@/components/Footer'
 export default function index() {
   return (
     <div>
-      {/* <TrendingAuction /> */}
+      <TrendingAuction />
       <Footer />
     </div>
   )
