@@ -10,24 +10,27 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore'
-import to from 'await-to-js'
+import { to } from 'await-to-js'
 
-async function createUser(userObj: User) {
-  // const [err, userRef] = await to(addDoc(collection(db, 'users'), userObj))
+async function createFirestoreUser(userObj: User) {
   const docRefToCreate = doc(db, 'users', userObj.publicAddress)
-  const [err, success] = await to(setDoc(docRefToCreate, userObj))
-  if (success) return
-  if (err) console.error(err)
+  const [err, _] = await to(setDoc(docRefToCreate, userObj))
+  if (err instanceof Error) {
+    console.error('User could not be created.', err)
+    return false
+  }
+  return true
 }
 
-async function fetchUser(pa: PublicAddress) {
+async function getFirestoreUser(pa: PublicAddress) {
   const [err, userSnapshot] = await to(getDoc(doc(db, 'users', pa)))
   if (userSnapshot?.exists()) {
     return userSnapshot.data()
   }
-  if (err) {
-    console.error(err)
+  if (err instanceof Error) {
+    console.error('Could not fetch user.', err)
   }
+  // Code to query database
   // const usersRef = collection(db, 'users')
   // const query1 = query(usersRef, where('publicAddress', '==', pa))
   // const [err, querySnapshot] = await to(getDocs(query1))
@@ -36,4 +39,4 @@ async function fetchUser(pa: PublicAddress) {
   // })
 }
 
-export { createUser, fetchUser }
+export { createFirestoreUser, getFirestoreUser }
