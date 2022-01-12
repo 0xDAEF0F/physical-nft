@@ -6,8 +6,8 @@ import SearchBar from './SearchBar'
 
 export default function HamburgerMenu() {
   return (
-    <Menu as='div' className='md:hidden'>
-      <Menu.Button as='button' className='p-6'>
+    <Menu as='div' className='lg:hidden'>
+      <Menu.Button as='button' className=''>
         <IoMenu size={25} />
       </Menu.Button>
       <Transition
@@ -24,7 +24,7 @@ export default function HamburgerMenu() {
             <Menu.Item>
               <SearchBar
                 placeholder={'Search'}
-                extraClass={'flex justify-center'}
+                extraClass={'flex justify-center sm:hidden px-10'}
               />
             </Menu.Item>
           </div>
