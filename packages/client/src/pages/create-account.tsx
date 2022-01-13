@@ -98,15 +98,26 @@ export default function CreateAccount() {
   }
 
   return (
-    <div>
-      {/* <button onClick={getUser}>Get Account</button> */}
-      <button onClick={() => signNonce(192387419237)}>Get Account</button>
-      <div>
-        <h1>user:</h1>
-        <p>{'' || userObj?.email}</p>
-        <p>{'' || userObj?.nonce}</p>
-        <p>{'' || userObj?.publicAddress}</p>
-      </div>
+    <div className='mt-10'>
+      <h1 className='text-center font-extrabold text-3xl'>
+        Please enter your information:
+      </h1>
+      <form className='flex-col flex items-center'>
+        <h3 className='mt-5 text-lg font-semibold'>Your public address is:</h3>
+        <input
+          type='text'
+          placeholder='Name'
+          className='outline block rounded text-center m-5'
+        />
+        <input
+          type='text'
+          placeholder='Email'
+          className='outline rounded block text-center mb-3'
+        />
+      </form>
+      <button className='bg-black text-white rounded py-2 px-5 block m-auto mt-4 font-semibold shadow-xl'>
+        Create account
+      </button>
     </div>
   )
 }
