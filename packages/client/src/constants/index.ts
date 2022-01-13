@@ -1,5 +1,7 @@
 export type PublicAddress = string
 export type Nonce = number
+export type SignedMessage = string
+export type MessageForUserToSign = string
 
 export type User = {
   publicAddress: PublicAddress

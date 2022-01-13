@@ -1,8 +1,14 @@
 import { createFirestoreUser, getFirestoreUser } from '@/lib/firestore-helpers'
 import React, { useState } from 'react'
 import { dummyData } from 'src/mocks'
-import { Nonce, PublicAddress, User } from '../constants'
-import { getDefaultProvider, ethers, providers, Signer, Wallet } from 'ethers'
+import {
+  MessageForUserToSign,
+  Nonce,
+  PublicAddress,
+  SignedMessage,
+  User,
+} from '../constants'
+import { utils, ethers, providers, Wallet } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { to } from 'await-to-js'
 import toast from 'react-hot-toast'
@@ -63,7 +69,15 @@ export default function CreateAccount() {
     console.log(signedMessage)
   }
 
-  async function validateSignedMessage() {}
+  function getAddressWhichSignedNonce(nonce: Nonce, sig: SignedMessage) {
+    const completeMessage: MessageForUserToSign =
+      customMessages.signNonceMessage + nonce
+    const pertainingPublicAddress: PublicAddress = utils.verifyMessage(
+      completeMessage,
+      sig
+    )
+    return pertainingPublicAddress
+  }
 
   async function createUser(user: User) {
     const wasUserCreated = await createFirestoreUser(user)
