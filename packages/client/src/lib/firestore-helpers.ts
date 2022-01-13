@@ -39,4 +39,12 @@ async function getFirestoreUser(pa: PublicAddress) {
   // })
 }
 
-export { createFirestoreUser, getFirestoreUser }
+async function isUserRegistered(pa: PublicAddress) {
+  const userSnapshot = await getDoc(doc(db, 'users', pa))
+  if (userSnapshot?.exists()) {
+    return true
+  }
+  return false
+}
+
+export { createFirestoreUser, getFirestoreUser, isUserRegistered }

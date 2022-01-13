@@ -1,6 +1,9 @@
-import { createFirestoreUser, getFirestoreUser } from '@/lib/firestore-helpers'
+import {
+  createFirestoreUser,
+  getFirestoreUser,
+  isUserRegistered,
+} from '@/lib/firestore-helpers'
 import React, { useState } from 'react'
-import { dummyData } from 'src/mocks'
 import {
   MessageForUserToSign,
   Nonce,
@@ -11,8 +14,9 @@ import {
 import { utils, ethers, providers, Wallet } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { to } from 'await-to-js'
-import toast from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 import { customMessages } from '@/constants/index'
+import { generateNonce } from 'src/utilities'
 
 export default function CreateAccount() {
   const [userObj, setUserObj] = useState<User>()
@@ -49,7 +53,7 @@ export default function CreateAccount() {
     }
   }
 
-  async function signNonce(nonce: Nonce) {
+  async function signNonceAndReturnMessage(nonce: Nonce) {
     const [err, provider] = await to(createProvider())
     if (!provider) {
       console.error(err)
@@ -65,8 +69,7 @@ export default function CreateAccount() {
       toast.error(customMessages.signedMessageFailed)
       return
     }
-    // Not yet sure, return signed nonce or what?
-    console.log(signedMessage)
+    return signedMessage
   }
 
   function getAddressWhichSignedNonce(nonce: Nonce, sig: SignedMessage) {
@@ -115,9 +118,42 @@ export default function CreateAccount() {
           className='outline rounded block text-center mb-3'
         />
       </form>
-      <button className='bg-black text-white rounded py-2 px-5 block m-auto mt-4 font-semibold shadow-xl'>
-        Create account
-      </button>
+      <div className='flex justify-center'>
+        <button className='bg-black text-white rounded py-2 px-5 block mt-4 font-semibold shadow-xl mr-3'>
+          Create account
+        </button>
+        <button
+          onClick={async () => {
+            const publicAddress = await getPublicAddressFromMetamask()
+            if (!publicAddress) return
+            const isValid = utils.isAddress(publicAddress)
+            const isExistingUser = await isUserRegistered(publicAddress)
+            if (!isValid) {
+              toast.error('Please provide a valid address.')
+              return
+            }
+            if (!isExistingUser) {
+              // redirect to sign in
+              toast.error('Create an account first')
+              return
+            }
+            const nonce = generateNonce()
+            const signedMessage = await signNonceAndReturnMessage(nonce)
+            if (!signedMessage) return
+            const addressWhichSignedTheNonce = getAddressWhichSignedNonce(
+              nonce,
+              signedMessage
+            )
+            if (addressWhichSignedTheNonce === publicAddress) {
+              toast.success('Congrats! You are authenticated.')
+              // return jwt
+            }
+          }}
+          className='bg-black text-white rounded py-2 px-5 block mt-4 font-semibold shadow-xl'
+        >
+          Login
+        </button>
+      </div>
     </div>
   )
 }
