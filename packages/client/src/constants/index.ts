@@ -13,6 +13,8 @@ const customMessages = {
     'Please sign the following nonce to verify ownership of address.\nnonce: ',
   metamaskNotInstalled: 'Please install Metamask extension.',
   signedMessageFailed: 'Was not able to sign message.',
+  publicKeyRetrievalFailed:
+    'Was not able to retrieve public address. Please try again.',
 }
 
 export { customMessages }

@@ -1,5 +1,5 @@
 import { createFirestoreUser, getFirestoreUser } from '@/lib/firestore-helpers'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { dummyData } from 'src/mocks'
 import { Nonce, PublicAddress, User } from '../constants'
 import { getDefaultProvider, ethers, providers, Signer, Wallet } from 'ethers'
@@ -24,17 +24,23 @@ export default function CreateAccount() {
     })
   }
 
-  async function requestPublicAddressFromMetamask() {
-    const ethereumWindowObject = await detectEthereumProvider()
-    if (!ethereumWindowObject) throw new Error('Please install Metamask.')
-
-    const provider = new providers.Web3Provider(
-      ethereumWindowObject as ethers.providers.ExternalProvider
-    )
-    await provider.send('eth_requestAccounts', [])
-    const [err, address] = await to(provider.getSigner().getAddress())
-    if (err) throw new Error('Was not able to retrieve address, try again.')
-    if (address) return address as PublicAddress
+  async function getPublicAddressFromMetamask() {
+    const [err, provider] = await to(createProvider())
+    if (!provider) {
+      console.error(err)
+      toast.error(customMessages.metamaskNotInstalled)
+      return
+    }
+    if (provider) {
+      await provider.send('eth_requestAccounts', [])
+      const [err2, address] = await to(provider.getSigner().getAddress())
+      if (!address) {
+        console.error(err2)
+        toast.error(customMessages.publicKeyRetrievalFailed)
+        return
+      }
+      return address
+    }
   }
 
   async function signNonce(nonce: Nonce) {
@@ -53,18 +59,19 @@ export default function CreateAccount() {
       toast.error(customMessages.signedMessageFailed)
       return
     }
+    // Not yet sure, return signed nonce or what?
     console.log(signedMessage)
   }
 
+  async function validateSignedMessage() {}
+
   async function createUser(user: User) {
     const wasUserCreated = await createFirestoreUser(user)
-    if (wasUserCreated) {
-      toast.success('User was created')
-    }
+    if (wasUserCreated) toast.success('User was created')
   }
 
   async function getUser() {
-    const [err, userAddress] = await to(requestPublicAddressFromMetamask())
+    const [err, userAddress] = await to(getPublicAddressFromMetamask())
     if (err) console.error(err)
     const [err2, userObject] = await to(
       getFirestoreUser(userAddress as PublicAddress)
