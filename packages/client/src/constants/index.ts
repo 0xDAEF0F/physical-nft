@@ -5,8 +5,7 @@ export type MessageForUserToSign = string
 
 export type User = {
   publicAddress: PublicAddress
-  nonce?: Nonce
-  username?: string
+  username: string
   email?: string
 }
 

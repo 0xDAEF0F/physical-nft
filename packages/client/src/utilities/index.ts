@@ -1,4 +1,6 @@
-function generateNonce() {
+import { Nonce } from '../constants'
+
+function generateNonce(): Nonce {
   return Math.floor(Math.random() * 10000000)
 }
 
