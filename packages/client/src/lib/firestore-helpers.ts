@@ -4,6 +4,7 @@ import {
   FETCH_USER_DB_ERROR,
   PublicAddress,
   User,
+  Username,
 } from '../constants'
 import { auth, db } from './index'
 import {
@@ -42,13 +43,14 @@ async function getUserDb(pa: PublicAddress) {
   if (err instanceof Error) {
     console.error(FETCH_USER_DB_ERROR, err)
   }
-  // Code to query database
-  // const usersRef = collection(db, 'users')
-  // const query1 = query(usersRef, where('publicAddress', '==', pa))
-  // const [err, querySnapshot] = await to(getDocs(query1))
-  // return querySnapshot?.forEach((doc) => {
-  //   console.log(doc)
-  // })
+}
+
+async function isUsernameAvailable(username: Username) {
+  const usernamesRef = collection(db, 'users')
+  const query1 = query(usernamesRef, where('username', '==', username))
+  const querySnapshot = await getDocs(query1)
+  if (querySnapshot.empty) return false
+  return true
 }
 
 async function isUserRegistered(pa: PublicAddress) {
@@ -59,4 +61,4 @@ async function isUserRegistered(pa: PublicAddress) {
   return false
 }
 
-export { createUserDb, getUserDb, isUserRegistered }
+export { createUserDb, getUserDb, isUserRegistered, isUsernameAvailable }

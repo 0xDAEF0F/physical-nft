@@ -2,10 +2,11 @@ export type PublicAddress = string
 export type Nonce = number
 export type SignedMessage = string
 export type MessageForUserToSign = string
+export type Username = string
 
 export type User = {
   publicAddress: PublicAddress
-  username: string
+  username: Username
   email?: string
 }
 

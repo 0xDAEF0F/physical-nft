@@ -1,4 +1,8 @@
-import { createUserDb, isUserRegistered } from '@/lib/firestore-helpers'
+import {
+  createUserDb,
+  isUsernameAvailable,
+  isUserRegistered,
+} from '@/lib/firestore-helpers'
 import {
   MessageForUserToSign,
   Nonce,
@@ -18,6 +22,7 @@ import toast from 'react-hot-toast'
 import { generateNonce } from 'src/utilities'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import { debounce } from 'lodash'
 
 export default function CreateAccount() {
   const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
