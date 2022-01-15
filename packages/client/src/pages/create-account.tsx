@@ -1,33 +1,32 @@
-import {
-  createFirestoreUser,
-  getFirestoreUser,
-  isUserRegistered,
-} from '@/lib/firestore-helpers'
-import React, { useState } from 'react'
+import { createUserDb, isUserRegistered } from '@/lib/firestore-helpers'
 import {
   MessageForUserToSign,
   Nonce,
   PublicAddress,
   SignedMessage,
   User,
-} from '../constants'
-import { utils, ethers, providers, Wallet } from 'ethers'
+  METAMASK_NOT_INSTALLED,
+  PK_RETRIEVAL_FAILURE,
+  SIGNED_MESSAGE_FAIL,
+  SIGN_NONCE_MESSAGE,
+} from '@/constants/index'
+import React, { useState } from 'react'
+import { utils, ethers, providers } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { to } from 'await-to-js'
 import toast from 'react-hot-toast'
-import { customMessages } from '@/constants/index'
 import { generateNonce } from 'src/utilities'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
 export default function CreateAccount() {
-  const [userObj, setUserObj] = useState<User>()
-  const [paUser, setPaUser] = useState<PublicAddress>('')
+  const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
 
   async function createProvider(): Promise<ethers.providers.Web3Provider> {
     const ethereumWindowObject = await detectEthereumProvider()
     return new Promise((res, rej) => {
       if (!ethereumWindowObject) {
+        toast.error(METAMASK_NOT_INSTALLED)
         rej('Metamask not installed in browser.')
       }
       const provider = new providers.Web3Provider(
@@ -41,43 +40,38 @@ export default function CreateAccount() {
     const [err, provider] = await to(createProvider())
     if (!provider) {
       console.error(err)
-      toast.error(customMessages.metamaskNotInstalled)
       return
     }
-    if (provider) {
-      await provider.send('eth_requestAccounts', [])
-      const [err2, address] = await to(provider.getSigner().getAddress())
-      if (!address) {
-        console.error(err2)
-        toast.error(customMessages.publicKeyRetrievalFailed)
-        return
-      }
-      return address
+    await provider.send('eth_requestAccounts', [])
+    const [err2, address] = await to(provider.getSigner().getAddress())
+    if (!address) {
+      console.error(err2)
+      toast.error(PK_RETRIEVAL_FAILURE)
+      return
     }
+    return address
   }
 
   async function signNonceAndReturnMessage(nonce: Nonce) {
     const [err, provider] = await to(createProvider())
     if (!provider) {
       console.error(err)
-      toast.error(customMessages.metamaskNotInstalled)
       return
     }
     const signer = provider.getSigner()
     const [err2, signedMessage] = await to(
-      signer.signMessage(customMessages.signNonceMessage + nonce)
+      signer.signMessage(SIGN_NONCE_MESSAGE + nonce)
     )
     if (!signedMessage) {
       console.error(err2)
-      toast.error(customMessages.signedMessageFailed)
+      toast.error(SIGNED_MESSAGE_FAIL)
       return
     }
     return signedMessage
   }
 
   function getAddressWhichSignedNonce(nonce: Nonce, sig: SignedMessage) {
-    const completeMessage: MessageForUserToSign =
-      customMessages.signNonceMessage + nonce
+    const completeMessage: MessageForUserToSign = SIGN_NONCE_MESSAGE + nonce
     const pertainingPublicAddress: PublicAddress = utils.verifyMessage(
       completeMessage,
       sig
@@ -86,21 +80,9 @@ export default function CreateAccount() {
   }
 
   async function createUser(user: User) {
-    const wasUserCreated = await createFirestoreUser(user)
+    const wasUserCreated = await createUserDb(user)
     if (wasUserCreated) toast.success('User was created')
-  }
-
-  async function getUser() {
-    const [err, userAddress] = await to(getPublicAddressFromMetamask())
-    if (err) console.error(err)
-    const [err2, userObject] = await to(
-      getFirestoreUser(userAddress as PublicAddress)
-    )
-    if (err2) console.error(err2)
-    if (userObject) setUserObj(userObject as User)
-    if (!userObj) {
-      toast.error('An account can not be fetched.')
-    }
+    if (!wasUserCreated) toast.error('User could not be created.')
   }
 
   async function handleLoginFlow() {
@@ -114,7 +96,7 @@ export default function CreateAccount() {
     }
     if (!isExistingUser) {
       toast.error('Create an account first')
-      if (isValid) setPaUser(publicAddress)
+      if (isValid) setPublicAddress(publicAddress)
       return
     }
     const nonce = generateNonce()
@@ -130,28 +112,39 @@ export default function CreateAccount() {
     }
   }
 
-  async function handleCreateAccountFlow() {
-    const publicAddress = paUser || (await getPublicAddressFromMetamask())
+  async function handleCreateAccountFlow(user: User) {
     if (!publicAddress) return
     const isValid = utils.isAddress(publicAddress)
     if (!isValid) {
       toast.error('Please provide a valid address.')
       return
     }
-    // provide a username and optional email
-    // check if it's a valid username or if it's taken in db.
-    // sign nonce in message to verify address
-    // create user in DB
-    // return JWT and success
+    const nonce = generateNonce()
+    const signedMessage = await signNonceAndReturnMessage(nonce)
+    if (!signedMessage) return
+    const addressWhichSignedTheNonce = getAddressWhichSignedNonce(
+      nonce,
+      signedMessage
+    )
+    if (addressWhichSignedTheNonce === publicAddress) {
+      await createUser(user)
+      // return a jwt
+      toast.success('Congrats! You are authenticated.')
+    }
   }
 
   return (
     <div className='mt-10'>
       <h1 className='text-center font-extrabold text-3xl'>
-        Please enter your information:
+        Please fill out the following form:
       </h1>
       <Formik
-        initialValues={{ publicAddress: paUser, username: '', email: '' }}
+        enableReinitialize
+        initialValues={{
+          publicAddress: publicAddress,
+          username: '',
+          email: '',
+        }}
         validationSchema={Yup.object({
           publicAddress: Yup.string()
             .required('Required')
@@ -164,14 +157,19 @@ export default function CreateAccount() {
             .required('Required'),
           email: Yup.string().email('Invalid email address').optional(),
         })}
-        onSubmit={(values) => {
-          console.log(values)
-        }}
+        onSubmit={(values) => handleCreateAccountFlow(values)}
       >
         <Form className='flex-col flex items-center mt-2'>
-          <label htmlFor='publicAddress'>
-            your public address is: {paUser}
-          </label>
+          <button
+            className='bg-black text-white rounded py-2 px-2 ml-2 mt-4 text-xs  shadow-xl mr-3'
+            onClick={async (e) => {
+              e.preventDefault()
+              const address = await getPublicAddressFromMetamask()
+              if (address) setPublicAddress(address)
+            }}
+          >
+            fetch my address
+          </button>
           <Field
             name='publicAddress'
             type='text'
