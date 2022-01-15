@@ -23,11 +23,39 @@ import toast from 'react-hot-toast'
 import { generateNonce } from 'src/utilities'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import {
+  Config,
+  colors,
+  starWars,
+  uniqueNamesGenerator,
+  adjectives,
+  animals,
+} from 'unique-names-generator'
 import { debounce } from 'lodash'
+
+const customConfig: Config = {
+  dictionaries: [colors, adjectives, animals],
+  separator: '_',
+  length: 3,
+}
 
 export default function CreateAccount() {
   const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
   const [username, setUsername] = useState<Username>('')
+
+  function generateRandomUsernames() {
+    return new Array(5)
+      .fill('')
+      .map(() => {
+        return uniqueNamesGenerator(customConfig)
+          .toLowerCase()
+          .split(' ')
+          .join('_')
+      })
+      .filter(async (each) => {
+        return await isUsernameAvailable(each)
+      })
+  }
 
   async function createProvider(): Promise<ethers.providers.Web3Provider> {
     const ethereumWindowObject = await detectEthereumProvider()
@@ -142,7 +170,10 @@ export default function CreateAccount() {
 
   return (
     <div className='mt-10'>
-      <h1 className='text-center font-extrabold text-3xl'>
+      <h1
+        onClick={generateRandomUsernames}
+        className='text-center font-extrabold text-3xl'
+      >
         Please fill out the following form:
       </h1>
       <Formik
