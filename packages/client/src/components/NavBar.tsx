@@ -2,6 +2,7 @@ import AppLogo from './Logo'
 import DivLink from './DivLink'
 import SearchBar from './SearchBar'
 import HamburgerMenu from './HamburgerMenu'
+import ConnectWallet from './ConnectWallet'
 
 export default function NavBar() {
   return (
@@ -12,16 +13,12 @@ export default function NavBar() {
           placeholder='Search songs, albums, artists and accounts'
           extraClass='hidden sm:flex px-10 xl:pl-40'
         />
-        <ul className='hidden lg:flex w-5/12 justify-center'>
+        <ul className='hidden lg:flex w-4/12 justify-center'>
           <DivLink to='/Explore' title='Explore' />
           <DivLink to='/Stats' title='Stats' />
-          <DivLink
-            to='/create-account'
-            title='Get Started'
-            xClass='whitespace-nowrap'
-          />
+          <ConnectWallet />
         </ul>
-        <div className='pr-5'>
+        <div className='lg:hidden pr-5'>
           <HamburgerMenu />
         </div>
       </nav>

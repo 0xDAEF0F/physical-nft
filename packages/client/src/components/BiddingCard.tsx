@@ -61,13 +61,17 @@ const BiddingCard = () => {
             </div>
             <div className='flex justify-between'>
               <div>
-                <p className='text-md text-gray-500'>Current bid</p>
+                <p className='text-md text-gray-500 whitespace-nowrap'>
+                  Current bid
+                </p>
                 <p className='text-sm font-medium text-white'>
                   {songExample.price} ETH
                 </p>
               </div>
               <div>
-                <p className='text-md text-gray-500'>Ending in</p>
+                <p className='text-md text-gray-500 whitespace-nowrap'>
+                  Ending in
+                </p>
                 <p className='text-sm font-medium text-white'>
                   {songExample.time}
                 </p>

@@ -3,10 +3,11 @@ import React from 'react'
 import { IoMenu } from 'react-icons/io5'
 import DivLink from './DivLink'
 import SearchBar from './SearchBar'
+import ConnectWallet from './ConnectWallet'
 
 export default function HamburgerMenu() {
   return (
-    <Menu as='div' className='lg:hidden'>
+    <Menu as='div' className=''>
       <Menu.Button as='button' className=''>
         <IoMenu size={25} />
       </Menu.Button>
@@ -40,7 +41,7 @@ export default function HamburgerMenu() {
           </div>
           <div className='px-1 py-1'>
             <Menu.Item>
-              <DivLink title='Get Started' to='/getstarted' />
+              <ConnectWallet xClass='w-full' />
             </Menu.Item>
           </div>
         </Menu.Items>
