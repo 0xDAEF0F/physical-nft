@@ -13,8 +13,9 @@ import {
   PK_RETRIEVAL_FAILURE,
   SIGNED_MESSAGE_FAIL,
   SIGN_NONCE_MESSAGE,
+  Username,
 } from '@/constants/index'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { utils, ethers, providers } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { to } from 'await-to-js'
@@ -26,6 +27,7 @@ import { debounce } from 'lodash'
 
 export default function CreateAccount() {
   const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
+  const [username, setUsername] = useState<Username>('')
 
   async function createProvider(): Promise<ethers.providers.Web3Provider> {
     const ethereumWindowObject = await detectEthereumProvider()
@@ -158,7 +160,8 @@ export default function CreateAccount() {
             )
             .label('public address entered'),
           username: Yup.string()
-            .max(10, 'Must be 10 characters or less')
+            .min(5, 'Must be 5 characters or more')
+            .max(16, 'Must be 16 characters or less')
             .required('Required'),
           email: Yup.string().email('Invalid email address').optional(),
         })}
