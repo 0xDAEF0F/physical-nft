@@ -3,10 +3,10 @@ import {
   DUPLICATE_USER,
   FETCH_USER_DB_ERROR,
   PublicAddress,
-  User,
   Username,
 } from '../constants'
-import { auth, db } from './index'
+import { User } from '@/constants/schema'
+import { db } from './index'
 import {
   addDoc,
   collection,
@@ -18,7 +18,6 @@ import {
   getDocs,
 } from 'firebase/firestore'
 import { to } from 'await-to-js'
-import toast from 'react-hot-toast'
 
 async function createUserDb(userObj: User) {
   const { publicAddress } = userObj
@@ -46,11 +45,12 @@ async function getUserDb(pa: PublicAddress) {
 }
 
 async function isUsernameAvailable(username: Username) {
+  console.log('call to db')
   const usernamesRef = collection(db, 'users')
   const query1 = query(usernamesRef, where('username', '==', username))
   const querySnapshot = await getDocs(query1)
-  if (querySnapshot.empty) return false
-  return true
+  if (querySnapshot.empty) return true
+  return false
 }
 
 async function isUserRegistered(pa: PublicAddress) {

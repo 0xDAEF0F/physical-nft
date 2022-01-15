@@ -4,12 +4,6 @@ export type SignedMessage = string
 export type MessageForUserToSign = string
 export type Username = string
 
-export type User = {
-  publicAddress: PublicAddress
-  username: Username
-  email?: string
-}
-
 const customMessages = {
   SIGN_NONCE_MESSAGE:
     'Please sign the following nonce to verify ownership of address.\nnonce: ',
@@ -22,6 +16,7 @@ const customMessages = {
   CREATE_USER_SUCCESS: 'Congratulations! User has been created.',
   CREATE_USER_ERROR: 'Sorry, user creation failure. Try again.',
   FETCH_USER_DB_ERROR: 'User could not be retrieved from database.',
+  USER_TAKEN: 'Username is already taken.',
 }
 
 export const {
@@ -33,4 +28,5 @@ export const {
   CREATE_USER_SUCCESS,
   FETCH_USER_DB_ERROR,
   CREATE_USER_ERROR,
+  USER_TAKEN,
 } = customMessages

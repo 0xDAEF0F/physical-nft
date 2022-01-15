@@ -8,13 +8,13 @@ import {
   Nonce,
   PublicAddress,
   SignedMessage,
-  User,
   METAMASK_NOT_INSTALLED,
   PK_RETRIEVAL_FAILURE,
   SIGNED_MESSAGE_FAIL,
   SIGN_NONCE_MESSAGE,
   Username,
 } from '@/constants/index'
+import { User, userSchema } from '@/constants/schema'
 import React, { useMemo, useState } from 'react'
 import { utils, ethers, providers } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider'
@@ -22,11 +22,9 @@ import { to } from 'await-to-js'
 import toast from 'react-hot-toast'
 import { generateNonce } from 'src/utilities'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
 import {
   Config,
   colors,
-  starWars,
   uniqueNamesGenerator,
   adjectives,
   animals,
@@ -43,7 +41,7 @@ export default function CreateAccount() {
   const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
   const [username, setUsername] = useState<Username>('')
 
-  function generateRandomUsernames() {
+  function generateUsernameSuggestions() {
     return new Array(5)
       .fill('')
       .map(() => {
@@ -171,7 +169,7 @@ export default function CreateAccount() {
   return (
     <div className='mt-10'>
       <h1
-        onClick={generateRandomUsernames}
+        onClick={generateUsernameSuggestions}
         className='text-center font-extrabold text-3xl'
       >
         Please fill out the following form:
@@ -183,19 +181,7 @@ export default function CreateAccount() {
           username: '',
           email: '',
         }}
-        validationSchema={Yup.object({
-          publicAddress: Yup.string()
-            .required('Required')
-            .test('is valid address', (d) =>
-              utils.isAddress(d as PublicAddress)
-            )
-            .label('public address entered'),
-          username: Yup.string()
-            .min(5, 'Must be 5 characters or more')
-            .max(16, 'Must be 16 characters or less')
-            .required('Required'),
-          email: Yup.string().email('Invalid email address').optional(),
-        })}
+        validationSchema={userSchema}
         onSubmit={(values) => handleCreateAccountFlow(values)}
       >
         <Form className='flex-col flex items-center mt-2'>
