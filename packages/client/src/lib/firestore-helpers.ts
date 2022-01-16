@@ -8,7 +8,6 @@ import {
 import { User } from '@/constants/schema'
 import { db } from './index'
 import {
-  addDoc,
   collection,
   doc,
   getDoc,

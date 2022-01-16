@@ -1,9 +1,22 @@
 import { object, string, InferType } from 'yup'
 import { utils } from 'ethers'
 import { isUsernameAvailable } from '@/lib/firestore-helpers'
-import { PublicAddress, USER_TAKEN } from '.'
+import { PublicAddress, Username, USER_TAKEN } from '.'
+import { debounce } from 'lodash'
 
 export type User = InferType<typeof userSchema>
+
+async function isUserFreeWithCb(value: Username, cb: (cb: boolean) => void) {
+  const res = await isUsernameAvailable(value)
+  cb(res)
+}
+
+const debouncedIsUserAvailable = debounce(isUserFreeWithCb, 1000)
+
+async function yupTestUserValidation(usr: Username): Promise<boolean> {
+  if (!usr || usr.length < 6 || usr.length > 16) return false
+  return new Promise((resolve) => debouncedIsUserAvailable(usr, resolve))
+}
 
 export const userSchema = object({
   publicAddress: string()
@@ -12,15 +25,10 @@ export const userSchema = object({
       utils.isAddress(d as PublicAddress)
     ),
   username: string()
-    .min(5, 'Must be 5 characters or more')
-    .max(16, 'Must be 16 characters or less')
-    .default('')
     .required('Required')
-    .strict(true)
-    .test(
-      'is username available',
-      USER_TAKEN,
-      async (usr) => await isUsernameAvailable(usr)
-    ),
+    .default('')
+    .min(6, 'Must be 6 characters or more')
+    .max(16, 'Must be 16 characters or less')
+    .test('is username available', USER_TAKEN, yupTestUserValidation),
   email: string().optional().default('').email('Invalid email address'),
 })

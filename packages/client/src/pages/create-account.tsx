@@ -15,7 +15,7 @@ import {
   Username,
 } from '@/constants/index'
 import { User, userSchema } from '@/constants/schema'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { utils, ethers, providers } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { to } from 'await-to-js'
@@ -29,7 +29,6 @@ import {
   adjectives,
   animals,
 } from 'unique-names-generator'
-import { debounce } from 'lodash'
 
 const customConfig: Config = {
   dictionaries: [colors, adjectives, animals],
