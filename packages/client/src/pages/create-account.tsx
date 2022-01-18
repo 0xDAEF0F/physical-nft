@@ -1,116 +1,25 @@
-import { createUserDb, isUserRegistered } from '@/lib/firestore-helpers'
-import {
-  MessageForUserToSign,
-  Nonce,
-  PublicAddress,
-  SignedMessage,
-  METAMASK_NOT_INSTALLED,
-  PK_RETRIEVAL_FAILURE,
-  SIGNED_MESSAGE_FAIL,
-  SIGN_NONCE_MESSAGE,
-  Username,
-} from '@/constants/index'
+import { createUserDb } from '@/lib/firestore-helpers'
+import { PublicAddress } from '@/constants/index'
 import { User, userSchema } from '@/constants/schema'
 import React, { useState } from 'react'
-import { utils, ethers, providers } from 'ethers'
-import detectEthereumProvider from '@metamask/detect-provider'
-import { to } from 'await-to-js'
+import { utils } from 'ethers'
 import toast from 'react-hot-toast'
-import { generateNonce } from 'src/utilities'
+import {
+  generateNonce,
+  getAddressWhichSignedNonce,
+  getPublicAddressFromMetamask,
+  signNonceAndReturnMessage,
+} from '../utilities/index'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import UsernameSuggestions from '@/components/UsernameSuggestions'
 
 export default function CreateAccount() {
   const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
 
-  async function createProvider(): Promise<ethers.providers.Web3Provider> {
-    const ethereumWindowObject = await detectEthereumProvider()
-    return new Promise((res, rej) => {
-      if (!ethereumWindowObject) {
-        toast.error(METAMASK_NOT_INSTALLED)
-        rej('Metamask not installed in browser.')
-      }
-      const provider = new providers.Web3Provider(
-        ethereumWindowObject as ethers.providers.ExternalProvider
-      )
-      res(provider)
-    })
-  }
-
-  async function getPublicAddressFromMetamask() {
-    const [err, provider] = await to(createProvider())
-    if (!provider) {
-      console.error(err)
-      return
-    }
-    await provider.send('eth_requestAccounts', [])
-    const [err2, address] = await to(provider.getSigner().getAddress())
-    if (!address) {
-      console.error(err2)
-      toast.error(PK_RETRIEVAL_FAILURE)
-      return
-    }
-    return address
-  }
-
-  async function signNonceAndReturnMessage(nonce: Nonce) {
-    const [err, provider] = await to(createProvider())
-    if (!provider) {
-      console.error(err)
-      return
-    }
-    const signer = provider.getSigner()
-    const [err2, signedMessage] = await to(
-      signer.signMessage(SIGN_NONCE_MESSAGE + nonce)
-    )
-    if (!signedMessage) {
-      console.error(err2)
-      toast.error(SIGNED_MESSAGE_FAIL)
-      return
-    }
-    return signedMessage
-  }
-
-  function getAddressWhichSignedNonce(nonce: Nonce, sig: SignedMessage) {
-    const completeMessage: MessageForUserToSign = SIGN_NONCE_MESSAGE + nonce
-    const pertainingPublicAddress: PublicAddress = utils.verifyMessage(
-      completeMessage,
-      sig
-    )
-    return pertainingPublicAddress
-  }
-
   async function createUser(user: User) {
     const wasUserCreated = await createUserDb(user)
     if (wasUserCreated) toast.success('User was created')
     if (!wasUserCreated) toast.error('User could not be created.')
-  }
-
-  async function handleLoginFlow() {
-    const publicAddress = await getPublicAddressFromMetamask()
-    if (!publicAddress) return
-    const isValid = utils.isAddress(publicAddress)
-    const isExistingUser = await isUserRegistered(publicAddress)
-    if (!isValid) {
-      toast.error('Please provide a valid address.')
-      return
-    }
-    if (!isExistingUser) {
-      toast.error('Create an account first')
-      if (isValid) setPublicAddress(publicAddress)
-      return
-    }
-    const nonce = generateNonce()
-    const signedMessage = await signNonceAndReturnMessage(nonce)
-    if (!signedMessage) return
-    const addressWhichSignedTheNonce = getAddressWhichSignedNonce(
-      nonce,
-      signedMessage
-    )
-    if (addressWhichSignedTheNonce === publicAddress) {
-      toast.success('Congrats! You are authenticated.')
-      // return jwt
-    }
   }
 
   async function handleCreateAccountFlow(user: User) {

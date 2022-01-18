@@ -2,6 +2,15 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import Image from 'next/image'
 import metaMaskLogo from 'src/assets/metamask-fox.svg'
+import { isUserRegistered } from '@/lib/firestore-helpers'
+import { utils } from 'ethers'
+import { toast } from 'react-hot-toast'
+import {
+  generateNonce,
+  getPublicAddressFromMetamask,
+  getAddressWhichSignedNonce,
+  signNonceAndReturnMessage,
+} from 'src/utilities'
 
 type Props = {
   xClass?: string
@@ -16,6 +25,36 @@ export default function ConnectWallet({ xClass }: Props) {
 
   function openModal() {
     setIsOpen(true)
+  }
+
+  async function handleLoginFlow() {
+    const publicAddress = await getPublicAddressFromMetamask()
+    if (!publicAddress) return
+    const isValid = utils.isAddress(publicAddress)
+    const isExistingUser = await isUserRegistered(publicAddress)
+    if (!isValid) {
+      toast.error('Please provide a valid address.')
+      closeModal()
+      return
+    }
+    if (!isExistingUser) {
+      // redirect to create-account
+      toast.error('Create an account first')
+      closeModal()
+      return
+    }
+    const nonce = generateNonce()
+    const signedMessage = await signNonceAndReturnMessage(nonce)
+    if (!signedMessage) return
+    const addressWhichSignedTheNonce = getAddressWhichSignedNonce(
+      nonce,
+      signedMessage
+    )
+    if (addressWhichSignedTheNonce === publicAddress) {
+      toast.success('Congrats! You are authenticated.')
+      closeModal()
+      // return jwt
+    }
   }
 
   return (
@@ -75,7 +114,7 @@ export default function ConnectWallet({ xClass }: Props) {
                   <button
                     className='bg-gradient-to-r from-orange-500 to-orange-300 py-4 px-4 rounded-lg transform transition duration-500 hover:scale-105 w-full'
                     type='button'
-                    onClick={closeModal}
+                    onClick={handleLoginFlow}
                   >
                     <div className='justify-between items-center flex'>
                       <p className='text-xl text-white font-semibold'>
