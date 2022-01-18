@@ -1,7 +1,12 @@
 import { createUserDb } from '@/lib/firestore-helpers'
-import { PublicAddress } from '@/constants/index'
+import {
+  CREATE_USER_ERROR,
+  CREATE_USER_SUCCESS,
+  INVALID_PK,
+  PublicAddress,
+} from '@/constants/index'
 import { User, userSchema } from '@/constants/schema'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { utils } from 'ethers'
 import toast from 'react-hot-toast'
 import {
@@ -12,21 +17,29 @@ import {
 } from '../utilities/index'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import UsernameSuggestions from '@/components/UsernameSuggestions'
+import { useRouter } from 'next/router'
 
 export default function CreateAccount() {
-  const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
+  const { query } = useRouter()
+  const [publicAddress, setPublicAddress] = useState('')
+
+  useEffect(() => {
+    if (query.address) {
+      setPublicAddress(query.address as string)
+    }
+  }, [query])
 
   async function createUser(user: User) {
     const wasUserCreated = await createUserDb(user)
-    if (wasUserCreated) toast.success('User was created')
-    if (!wasUserCreated) toast.error('User could not be created.')
+    if (wasUserCreated) toast.success(CREATE_USER_SUCCESS)
+    if (!wasUserCreated) toast.error(CREATE_USER_ERROR)
   }
 
   async function handleCreateAccountFlow(user: User) {
     if (!publicAddress) return
     const isValid = utils.isAddress(publicAddress)
     if (!isValid) {
-      toast.error('Please provide a valid address.')
+      toast.error(INVALID_PK)
       return
     }
     const nonce = generateNonce()

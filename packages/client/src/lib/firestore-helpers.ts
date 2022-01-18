@@ -28,14 +28,14 @@ import {
 const customConfig: Config = {
   dictionaries: [colors, adjectives, animals],
   separator: '_',
-  length: 3,
+  length: 2,
 }
 
 async function createUserDb(userObj: User) {
   const { publicAddress } = userObj
   if (await isUserRegistered(publicAddress)) {
     console.error(DUPLICATE_USER)
-    return
+    return false
   }
   const docRefToCreate = doc(db, 'users', userObj.publicAddress)
   const [err, _] = await to(setDoc(docRefToCreate, userObj))
@@ -57,9 +57,16 @@ async function getUserDb(pa: PublicAddress) {
 }
 
 async function isUsernameAvailable(username: Username) {
-  console.log('call to db')
   const usernamesRef = collection(db, 'users')
   const query1 = query(usernamesRef, where('username', '==', username))
+  const querySnapshot = await getDocs(query1)
+  if (querySnapshot.empty) return true
+  return false
+}
+
+async function areUsernamesAvailable(arr: Username[]) {
+  const usernamesRef = collection(db, 'users')
+  const query1 = query(usernamesRef, where('username', 'in', arr))
   const querySnapshot = await getDocs(query1)
   if (querySnapshot.empty) return true
   return false
@@ -73,18 +80,14 @@ async function isUserRegistered(pa: PublicAddress) {
   return false
 }
 
-function generateUsernameSuggestions() {
-  return new Array(5)
-    .fill('')
-    .map(() => {
-      return uniqueNamesGenerator(customConfig)
-        .toLowerCase()
-        .split(' ')
-        .join('_')
-    })
-    .filter(async (each) => {
-      return await isUsernameAvailable(each)
-    })
+async function generateUsernameSuggestions() {
+  const suggestions = [1, 2, 3, 4, 5].map(() =>
+    uniqueNamesGenerator(customConfig)
+  )
+  if (await areUsernamesAvailable(suggestions)) {
+    return suggestions
+  }
+  return []
 }
 
 export {

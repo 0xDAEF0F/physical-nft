@@ -11,18 +11,20 @@ import {
   getAddressWhichSignedNonce,
   signNonceAndReturnMessage,
 } from 'src/utilities'
+import { useRouter } from 'next/router'
+import { CACC_TO_LOGIN, INVALID_PK } from '../constants'
 
 type Props = {
   xClass?: string
 }
 
 export default function ConnectWallet({ xClass }: Props) {
-  let [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   function closeModal() {
     setIsOpen(false)
   }
-
   function openModal() {
     setIsOpen(true)
   }
@@ -33,14 +35,13 @@ export default function ConnectWallet({ xClass }: Props) {
     const isValid = utils.isAddress(publicAddress)
     const isExistingUser = await isUserRegistered(publicAddress)
     if (!isValid) {
-      toast.error('Please provide a valid address.')
+      toast.error(INVALID_PK)
       closeModal()
       return
     }
     if (!isExistingUser) {
-      // redirect to create-account
-      toast.error('Create an account first')
-      closeModal()
+      toast.error(CACC_TO_LOGIN)
+      router.push(`/create-account?address=${publicAddress}`)
       return
     }
     const nonce = generateNonce()

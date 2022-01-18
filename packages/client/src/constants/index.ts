@@ -17,6 +17,8 @@ const customMessages = {
   CREATE_USER_ERROR: 'Sorry, user creation failure. Try again.',
   FETCH_USER_DB_ERROR: 'User could not be retrieved from database.',
   USER_TAKEN: 'Username is already taken.',
+  CACC_TO_LOGIN: 'Please create an account to login.',
+  INVALID_PK: 'Provided address is invalid, please try again.',
 }
 
 export const {
@@ -29,4 +31,6 @@ export const {
   FETCH_USER_DB_ERROR,
   CREATE_USER_ERROR,
   USER_TAKEN,
+  INVALID_PK,
+  CACC_TO_LOGIN,
 } = customMessages
