@@ -1,8 +1,4 @@
-import {
-  createUserDb,
-  isUsernameAvailable,
-  isUserRegistered,
-} from '@/lib/firestore-helpers'
+import { createUserDb, isUserRegistered } from '@/lib/firestore-helpers'
 import {
   MessageForUserToSign,
   Nonce,
@@ -22,37 +18,10 @@ import { to } from 'await-to-js'
 import toast from 'react-hot-toast'
 import { generateNonce } from 'src/utilities'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
-import {
-  Config,
-  colors,
-  uniqueNamesGenerator,
-  adjectives,
-  animals,
-} from 'unique-names-generator'
-
-const customConfig: Config = {
-  dictionaries: [colors, adjectives, animals],
-  separator: '_',
-  length: 3,
-}
+import UsernameSuggestions from '@/components/UsernameSuggestions'
 
 export default function CreateAccount() {
   const [publicAddress, setPublicAddress] = useState<PublicAddress>('')
-  const [username, setUsername] = useState<Username>('')
-
-  function generateUsernameSuggestions() {
-    return new Array(5)
-      .fill('')
-      .map(() => {
-        return uniqueNamesGenerator(customConfig)
-          .toLowerCase()
-          .split(' ')
-          .join('_')
-      })
-      .filter(async (each) => {
-        return await isUsernameAvailable(each)
-      })
-  }
 
   async function createProvider(): Promise<ethers.providers.Web3Provider> {
     const ethereumWindowObject = await detectEthereumProvider()
@@ -167,10 +136,7 @@ export default function CreateAccount() {
 
   return (
     <div className='mt-10'>
-      <h1
-        onClick={generateUsernameSuggestions}
-        className='text-center font-extrabold text-3xl'
-      >
+      <h1 className='text-center font-extrabold text-3xl'>
         Please fill out the following form:
       </h1>
       <Formik
@@ -211,11 +177,9 @@ export default function CreateAccount() {
             className='outline block rounded text-center m-5'
             placeholder='username'
           />
-          <ErrorMessage
-            name='username'
-            component='p'
-            className='text-red-600'
-          />
+          <ErrorMessage name='username'>
+            {(msg) => <UsernameSuggestions>{msg}</UsernameSuggestions>}
+          </ErrorMessage>
           <Field
             name='email'
             type='text'

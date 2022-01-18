@@ -17,6 +17,19 @@ import {
   getDocs,
 } from 'firebase/firestore'
 import { to } from 'await-to-js'
+import {
+  Config,
+  colors,
+  uniqueNamesGenerator,
+  adjectives,
+  animals,
+} from 'unique-names-generator'
+
+const customConfig: Config = {
+  dictionaries: [colors, adjectives, animals],
+  separator: '_',
+  length: 3,
+}
 
 async function createUserDb(userObj: User) {
   const { publicAddress } = userObj
@@ -60,4 +73,24 @@ async function isUserRegistered(pa: PublicAddress) {
   return false
 }
 
-export { createUserDb, getUserDb, isUserRegistered, isUsernameAvailable }
+function generateUsernameSuggestions() {
+  return new Array(5)
+    .fill('')
+    .map(() => {
+      return uniqueNamesGenerator(customConfig)
+        .toLowerCase()
+        .split(' ')
+        .join('_')
+    })
+    .filter(async (each) => {
+      return await isUsernameAvailable(each)
+    })
+}
+
+export {
+  createUserDb,
+  getUserDb,
+  isUserRegistered,
+  isUsernameAvailable,
+  generateUsernameSuggestions,
+}
