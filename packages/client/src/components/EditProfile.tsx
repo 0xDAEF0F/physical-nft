@@ -5,14 +5,22 @@ function EditProfile() {
     <section className='py-20 h-screen'>
       <div className='mx-auto container max-w-3xl md:w-3/4 px-5'>
         <p className='text-4xl font-bold mb-10 ml-5'>Edit your profile</p>
+
         <div className='bg-white text-gray-600 space-y-6 rounded-xl shadow-md'>
+          <div className='flex content-center pr-10 pt-10 justify-end'>
+            <p className='text-red-700'>*</p>
+            <p className='text-gray-500 text-sm font-normal pl-1'>Required</p>
+          </div>
           <div className='md:inline-flex  space-y-4 md:space-y-0  w-full p-4 items-center'>
             <h2 className='md:w-1/3 max-w-sm mx-auto text-2xl font-medium'>
               Enter your information
             </h2>
             <div className='md:w-2/3 mx-auto max-w-sm space-y-5'>
               <div>
-                <label className='text-sm text-gray-500'>Username</label>
+                <div className='flex justify-start'>
+                  <label className='text-sm text-gray-500'>Username</label>
+                  <p className='text-red-700'>*</p>
+                </div>
                 <div className='w-full inline-flex border rounded-md'>
                   <div className='w-1/12 pt-2 bg-gray-100'>
                     <svg
@@ -52,7 +60,10 @@ function EditProfile() {
               Receive email notifications
             </h2>
             <div className='md:w-2/3 max-w-sm mx-auto'>
-              <label className='text-sm text-gray-500'>Email</label>
+              <div className='flex justify-start'>
+                <label className='text-sm text-gray-500'>Email</label>
+                <p className='text-red-700'>*</p>
+              </div>
               <div className='w-full inline-flex border rounded-md'>
                 <div className='pt-2 w-1/12 bg-gray-100 bg-opacity-50'>
                   <svg
@@ -131,7 +142,7 @@ function EditProfile() {
               Add your social media links
             </h2>
             <div className='md:w-2/3 max-w-sm mx-auto'>
-              <label className='text-sm text-gray-500'>Email</label>
+              <label className='text-sm text-gray-500'>Links</label>
               <div className='w-full inline-flex border rounded-md'>
                 <div className='pt-2 w-1/12 bg-gray-100 bg-opacity-50'>
                   <svg
