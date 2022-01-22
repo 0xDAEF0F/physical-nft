@@ -2,20 +2,47 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import Image from 'next/image'
 import metaMaskLogo from 'src/assets/metamask-fox.svg'
-import { isUserRegistered } from '@/lib/firestore-helpers'
-import { utils } from 'ethers'
 import { toast } from 'react-hot-toast'
 import {
-  generateNonce,
   getPublicAddressFromMetamask,
-  getAddressWhichSignedNonce,
   signNonceAndReturnMessage,
 } from 'src/utilities'
 import { useRouter } from 'next/router'
-import { CACC_TO_LOGIN, INVALID_PK } from '../constants'
+import {
+  CACC_TO_LOGIN,
+  CREDENTIALS_MISSING,
+  INVALID_PK,
+  Nonce,
+  PK_RETRIEVAL_FAILURE,
+  PublicAddress,
+  REQUEST_METHOD_ERR,
+  SignedMessage,
+  SIGNED_MESSAGE_FAIL,
+  SIGNED_NONCE_INVALID,
+  USER_DOES_NOT_EXIST,
+  USER_UPDATE_ERROR,
+} from '../constants'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 type Props = {
   xClass?: string
+}
+const authApi = 'http://localhost:3000/api/auth'
+interface MyReqConfig extends AxiosRequestConfig {
+  params?: {
+    publicAddress: PublicAddress
+  }
+  data?: {
+    nonce: Nonce
+    publicAddress: PublicAddress
+    signedMessage: SignedMessage
+  }
+}
+interface MyApiResGet extends AxiosResponse {
+  data: Nonce
+}
+interface MyApiResPut extends AxiosResponse {
+  data: string
 }
 
 export default function ConnectWallet({ xClass }: Props) {
@@ -29,32 +56,95 @@ export default function ConnectWallet({ xClass }: Props) {
     setIsOpen(true)
   }
 
+  function handleInvalidAddress(err: AxiosError) {
+    console.error(err)
+    toast.error(INVALID_PK)
+  }
+
+  function handleNoAddress(err: AxiosError) {
+    console.error(err)
+    toast.error(PK_RETRIEVAL_FAILURE)
+  }
+
+  function handleUserDoesNotExist(
+    err: AxiosError,
+    publicAddress: PublicAddress
+  ) {
+    console.error(err)
+    toast.error(CACC_TO_LOGIN)
+    closeModal()
+    router.push(`/create-account?address=${publicAddress}`)
+  }
+
+  function handleUserCouldNotBeUpdated(err: AxiosError) {
+    console.error(err)
+    toast.error(USER_UPDATE_ERROR)
+  }
+
+  function handleInvalidSignedNonce(err: AxiosError) {
+    console.error(err)
+    toast.error(SIGNED_NONCE_INVALID)
+  }
+
+  function handleMissingCredentials(err: AxiosError) {
+    console.error(err)
+    toast.error(CREDENTIALS_MISSING)
+  }
+
+  function handleInvalidReqMethod(err: AxiosError) {
+    console.error(err)
+    toast.error(REQUEST_METHOD_ERR)
+  }
+
   async function handleLoginFlow() {
     const publicAddress = await getPublicAddressFromMetamask()
-    if (!publicAddress) return
-    const isValid = utils.isAddress(publicAddress)
-    const isExistingUser = await isUserRegistered(publicAddress)
-    if (!isValid) {
-      toast.error(INVALID_PK)
-      closeModal()
-      return
-    }
-    if (!isExistingUser) {
-      toast.error(CACC_TO_LOGIN)
-      router.push(`/create-account?address=${publicAddress}`)
-      return
-    }
-    const nonce = generateNonce()
+    if (!publicAddress) return toast.error(PK_RETRIEVAL_FAILURE)
+
+    const getResponse = await axios
+      .get<string, MyApiResGet, MyReqConfig>(authApi, {
+        params: { publicAddress },
+      })
+      .catch((err: AxiosError) => {
+        if (err.response?.data === PK_RETRIEVAL_FAILURE) handleNoAddress(err)
+        if (err.response?.data === USER_DOES_NOT_EXIST)
+          handleUserDoesNotExist(err, publicAddress)
+        if (err.response?.data === INVALID_PK) handleInvalidAddress(err)
+        if (err.response?.data === USER_UPDATE_ERROR)
+          handleUserCouldNotBeUpdated(err)
+        if (err.response?.data === REQUEST_METHOD_ERR)
+          handleInvalidReqMethod(err)
+        return
+      })
+    if (!getResponse) return
+
+    const nonce = getResponse.data
     const signedMessage = await signNonceAndReturnMessage(nonce)
-    if (!signedMessage) return
-    const addressWhichSignedTheNonce = getAddressWhichSignedNonce(
-      nonce,
-      signedMessage
-    )
-    if (addressWhichSignedTheNonce === publicAddress) {
-      toast.success('Congrats! You are authenticated.')
+    if (!signedMessage) {
+      toast.error(SIGNED_MESSAGE_FAIL)
+      return
+    }
+    const resFromApiAuth = await axios
+      .put<string, MyApiResPut>(authApi, {
+        publicAddress,
+        nonce,
+        signedMessage,
+      })
+      .catch((err: AxiosError) => {
+        if (err.response?.data === SIGNED_NONCE_INVALID)
+          handleInvalidSignedNonce(err)
+        if (err.response?.data === USER_UPDATE_ERROR)
+          handleUserCouldNotBeUpdated(err)
+        if (err.response?.data === CREDENTIALS_MISSING)
+          handleMissingCredentials(err)
+        if (err.response?.data === REQUEST_METHOD_ERR)
+          handleInvalidReqMethod(err)
+        return
+      })
+
+    const jwt = resFromApiAuth?.data
+    if (jwt) {
       closeModal()
-      // return jwt
+      return toast.success(`Token: ${resFromApiAuth?.data}`)
     }
   }
 
