@@ -1,23 +1,28 @@
-import { createUserDb } from '@/lib/firestore-helpers'
 import {
   CREATE_USER_ERROR,
-  CREATE_USER_SUCCESS,
+  CREDENTIALS_MISSING,
+  DUPLICATE_USER,
+  FETCH_USER_DB_ERROR,
   INVALID_PK,
-  PublicAddress,
+  Jwt,
+  nextApi,
+  REQUEST_METHOD_ERR,
+  SIGNED_NONCE_INVALID,
+  USER_DOES_NOT_EXIST,
+  USER_UPDATE_ERROR,
 } from '@/constants/index'
 import { User, userSchema } from '@/constants/schema'
 import React, { useEffect, useState } from 'react'
-import { utils } from 'ethers'
 import toast from 'react-hot-toast'
 import {
-  generateNonce,
-  getAddressWhichSignedNonce,
   getPublicAddressFromMetamask,
   signNonceAndReturnMessage,
 } from '../utilities/index'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import UsernameSuggestions from '@/components/UsernameSuggestions'
 import { useRouter } from 'next/router'
+import axios, { AxiosError } from 'axios'
+import { logClientErr } from '@/utilities/client-error-handlers'
 
 export default function CreateAccount() {
   const { query } = useRouter()
@@ -29,31 +34,48 @@ export default function CreateAccount() {
     }
   }, [query])
 
-  async function createUser(user: User) {
-    const wasUserCreated = await createUserDb(user)
-    if (wasUserCreated) toast.success(CREATE_USER_SUCCESS)
-    if (!wasUserCreated) toast.error(CREATE_USER_ERROR)
-  }
-
   async function handleCreateAccountFlow(user: User) {
-    if (!publicAddress) return
-    const isValid = utils.isAddress(publicAddress)
-    if (!isValid) {
-      toast.error(INVALID_PK)
-      return
-    }
-    const nonce = generateNonce()
+    const res = await axios
+      .put<number>(`${nextApi}/create-account`, user)
+      .catch((err: AxiosError) => {
+        if (err.response?.data === REQUEST_METHOD_ERR)
+          logClientErr(err, REQUEST_METHOD_ERR)
+        if (err.response?.data === FETCH_USER_DB_ERROR)
+          logClientErr(err, FETCH_USER_DB_ERROR)
+        if (err.response?.data === DUPLICATE_USER)
+          logClientErr(err, DUPLICATE_USER)
+        if (err.response?.data === CREATE_USER_ERROR)
+          logClientErr(err, CREATE_USER_ERROR)
+      })
+    if (!res) return
+    const nonce = res.data
     const signedMessage = await signNonceAndReturnMessage(nonce)
     if (!signedMessage) return
-    const addressWhichSignedTheNonce = getAddressWhichSignedNonce(
+
+    const credentials = {
+      publicAddress,
+      signedMessage,
       nonce,
-      signedMessage
-    )
-    if (addressWhichSignedTheNonce === publicAddress) {
-      await createUser(user)
-      // return a jwt
-      toast.success('Congrats! You are authenticated.')
     }
+    const resFromAuth = await axios
+      .put<Jwt>(`${nextApi}/auth`, credentials)
+      .catch((err: AxiosError) => {
+        if (err.response?.data === REQUEST_METHOD_ERR)
+          logClientErr(err, REQUEST_METHOD_ERR)
+        if (err.response?.data === CREDENTIALS_MISSING)
+          logClientErr(err, CREDENTIALS_MISSING)
+        if (err.response?.data === INVALID_PK) logClientErr(err, INVALID_PK)
+        if (err.response?.data === USER_DOES_NOT_EXIST)
+          logClientErr(err, USER_DOES_NOT_EXIST)
+        if (err.response?.data === SIGNED_NONCE_INVALID)
+          logClientErr(err, SIGNED_NONCE_INVALID)
+        if (err.response?.data === USER_UPDATE_ERROR)
+          logClientErr(err, USER_UPDATE_ERROR)
+      })
+    if (!resFromAuth) return
+
+    const jwt = resFromAuth.data
+    return toast.success('Success' + jwt)
   }
 
   return (
@@ -69,7 +91,7 @@ export default function CreateAccount() {
           email: '',
         }}
         validationSchema={userSchema}
-        onSubmit={(values) => handleCreateAccountFlow(values)}
+        onSubmit={(user) => handleCreateAccountFlow(user)}
       >
         <Form className='flex-col flex items-center mt-2'>
           <button

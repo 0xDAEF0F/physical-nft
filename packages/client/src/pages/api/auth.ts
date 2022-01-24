@@ -1,6 +1,7 @@
 import {
   CREDENTIALS_MISSING,
   INVALID_PK,
+  JWT_CREATION_ERROR,
   REQUEST_METHOD_ERR,
   SIGNED_NONCE_INVALID,
   USER_DOES_NOT_EXIST,
@@ -14,6 +15,8 @@ import {
   updateNonceAndReturnIfSuccess,
 } from '@/lib/server/server-firebase-helpers'
 import { utils } from 'ethers'
+import { auth } from '@/lib/server'
+import to from 'await-to-js'
 
 export default async function handler(
   req: NextApiRequest,
@@ -40,5 +43,8 @@ export default async function handler(
   const updatedNonce = await updateNonceAndReturnIfSuccess(publicAddress)
   if (!updatedNonce) return res.status(503).send(USER_UPDATE_ERROR)
 
-  return res.status(200).send('AUTHORIZED')
+  const [_, jwt] = await to(auth.createCustomToken(publicAddress))
+  if (!jwt) return res.status(503).send(JWT_CREATION_ERROR)
+
+  return res.status(200).send(jwt)
 }

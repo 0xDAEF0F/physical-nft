@@ -19,7 +19,7 @@ export async function isUserInAuthDb(pa: PublicAddress) {
 export async function createUserNonce(pa: PublicAddress) {
   const userRef = db.collection('users').doc(pa)
   const nonce = generateNonce()
-  const timestamp = await userRef.set({ nonce })
+  const [_, timestamp] = await to(userRef.set({ nonce }))
   if (!timestamp) throw new Error(CREATE_USER_ERROR)
   return nonce
 }

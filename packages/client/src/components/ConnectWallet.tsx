@@ -1,3 +1,18 @@
+import {
+  CACC_TO_LOGIN,
+  CREDENTIALS_MISSING,
+  INVALID_PK,
+  Jwt,
+  JWT_CREATION_ERROR,
+  nextApi,
+  Nonce,
+  PK_RETRIEVAL_FAILURE,
+  REQUEST_METHOD_ERR,
+  SIGNED_MESSAGE_FAIL,
+  SIGNED_NONCE_INVALID,
+  USER_DOES_NOT_EXIST,
+  USER_UPDATE_ERROR,
+} from '../constants'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import Image from 'next/image'
@@ -8,41 +23,11 @@ import {
   signNonceAndReturnMessage,
 } from 'src/utilities'
 import { useRouter } from 'next/router'
-import {
-  CACC_TO_LOGIN,
-  CREDENTIALS_MISSING,
-  INVALID_PK,
-  Nonce,
-  PK_RETRIEVAL_FAILURE,
-  PublicAddress,
-  REQUEST_METHOD_ERR,
-  SignedMessage,
-  SIGNED_MESSAGE_FAIL,
-  SIGNED_NONCE_INVALID,
-  USER_DOES_NOT_EXIST,
-  USER_UPDATE_ERROR,
-} from '../constants'
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosError } from 'axios'
+import { logClientErr } from '@/utilities/client-error-handlers'
 
 type Props = {
   xClass?: string
-}
-const authApi = 'http://localhost:3000/api/auth'
-interface MyReqConfig extends AxiosRequestConfig {
-  params?: {
-    publicAddress: PublicAddress
-  }
-  data?: {
-    nonce: Nonce
-    publicAddress: PublicAddress
-    signedMessage: SignedMessage
-  }
-}
-interface MyApiResGet extends AxiosResponse {
-  data: Nonce
-}
-interface MyApiResPut extends AxiosResponse {
-  data: string
 }
 
 export default function ConnectWallet({ xClass }: Props) {
@@ -56,64 +41,28 @@ export default function ConnectWallet({ xClass }: Props) {
     setIsOpen(true)
   }
 
-  function handleInvalidAddress(err: AxiosError) {
-    console.error(err)
-    toast.error(INVALID_PK)
-  }
-
-  function handleNoAddress(err: AxiosError) {
-    console.error(err)
-    toast.error(PK_RETRIEVAL_FAILURE)
-  }
-
-  function handleUserDoesNotExist(
-    err: AxiosError,
-    publicAddress: PublicAddress
-  ) {
-    console.error(err)
-    toast.error(CACC_TO_LOGIN)
-    closeModal()
-    router.push(`/create-account?address=${publicAddress}`)
-  }
-
-  function handleUserCouldNotBeUpdated(err: AxiosError) {
-    console.error(err)
-    toast.error(USER_UPDATE_ERROR)
-  }
-
-  function handleInvalidSignedNonce(err: AxiosError) {
-    console.error(err)
-    toast.error(SIGNED_NONCE_INVALID)
-  }
-
-  function handleMissingCredentials(err: AxiosError) {
-    console.error(err)
-    toast.error(CREDENTIALS_MISSING)
-  }
-
-  function handleInvalidReqMethod(err: AxiosError) {
-    console.error(err)
-    toast.error(REQUEST_METHOD_ERR)
-  }
-
   async function handleLoginFlow() {
     const publicAddress = await getPublicAddressFromMetamask()
     if (!publicAddress) return toast.error(PK_RETRIEVAL_FAILURE)
 
     const getResponse = await axios
-      .get<string, MyApiResGet, MyReqConfig>(authApi, {
+      .get<Nonce>(`${nextApi}/get-nonce`, {
         params: { publicAddress },
       })
       .catch((err: AxiosError) => {
-        if (err.response?.data === PK_RETRIEVAL_FAILURE) handleNoAddress(err)
-        if (err.response?.data === USER_DOES_NOT_EXIST)
-          handleUserDoesNotExist(err, publicAddress)
-        if (err.response?.data === INVALID_PK) handleInvalidAddress(err)
-        if (err.response?.data === USER_UPDATE_ERROR)
-          handleUserCouldNotBeUpdated(err)
         if (err.response?.data === REQUEST_METHOD_ERR)
-          handleInvalidReqMethod(err)
-        return
+          logClientErr(err, REQUEST_METHOD_ERR)
+        if (err.response?.data === PK_RETRIEVAL_FAILURE)
+          logClientErr(err, PK_RETRIEVAL_FAILURE)
+        if (err.response?.data === INVALID_PK) {
+          logClientErr(err, INVALID_PK)
+        }
+        if (err.response?.data === USER_UPDATE_ERROR)
+          logClientErr(err, USER_UPDATE_ERROR)
+        if (err.response?.data === USER_DOES_NOT_EXIST) {
+          logClientErr(err, CACC_TO_LOGIN)
+          router.push(`/create-account?address=${publicAddress}`)
+        }
       })
     if (!getResponse) return
 
@@ -124,28 +73,28 @@ export default function ConnectWallet({ xClass }: Props) {
       return
     }
     const resFromApiAuth = await axios
-      .put<string, MyApiResPut>(authApi, {
+      .put<Jwt>(`${nextApi}/auth`, {
         publicAddress,
         nonce,
         signedMessage,
       })
       .catch((err: AxiosError) => {
-        if (err.response?.data === SIGNED_NONCE_INVALID)
-          handleInvalidSignedNonce(err)
-        if (err.response?.data === USER_UPDATE_ERROR)
-          handleUserCouldNotBeUpdated(err)
-        if (err.response?.data === CREDENTIALS_MISSING)
-          handleMissingCredentials(err)
         if (err.response?.data === REQUEST_METHOD_ERR)
-          handleInvalidReqMethod(err)
-        return
+          logClientErr(err, REQUEST_METHOD_ERR)
+        if (err.response?.data === SIGNED_NONCE_INVALID)
+          logClientErr(err, SIGNED_NONCE_INVALID)
+        if (err.response?.data === USER_UPDATE_ERROR)
+          logClientErr(err, USER_UPDATE_ERROR)
+        if (err.response?.data === CREDENTIALS_MISSING)
+          logClientErr(err, CREDENTIALS_MISSING)
+        if (err.response?.data === JWT_CREATION_ERROR)
+          logClientErr(err, JWT_CREATION_ERROR)
       })
+    if (!resFromApiAuth) return
 
     const jwt = resFromApiAuth?.data
-    if (jwt) {
-      closeModal()
-      return toast.success(`Token: ${resFromApiAuth?.data}`)
-    }
+    localStorage.setItem('token', jwt)
+    return toast.success('AUTHENTICATED JWT SAVED IN LOCAL STORAGE')
   }
 
   return (

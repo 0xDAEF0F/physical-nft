@@ -13,6 +13,7 @@ import {
   CREATE_USER_ERROR,
   DUPLICATE_USER,
   FETCH_USER_DB_ERROR,
+  AuthFirebaseUser,
 } from '@/constants/index'
 
 export default async function handler(
@@ -35,13 +36,19 @@ export default async function handler(
   if (isExistingUserArr && (isExistingUserArr[0] || isExistingUserArr[1]))
     return res.status(400).send(DUPLICATE_USER)
 
-  const userToCreateAuth = {
-    uid: publicAddress,
-    email,
-    emailVerified: false,
-    displayName: username,
-    disabled: true,
-  }
+  const userToCreateAuth: AuthFirebaseUser = !email
+    ? {
+        uid: publicAddress,
+        displayName: username,
+        // disabled: true,
+      }
+    : {
+        uid: publicAddress,
+        displayName: username,
+        email,
+        emailVerified: false,
+        // disabled: true,
+      }
 
   const [err2, values2] = await to(
     Promise.all([
@@ -52,5 +59,6 @@ export default async function handler(
   if (!values2 || err2 instanceof Error)
     return res.status(503).send(CREATE_USER_ERROR)
 
-  return res.status(200).send(values2[1])
+  const [, nonce] = values2
+  return res.status(200).send(nonce)
 }

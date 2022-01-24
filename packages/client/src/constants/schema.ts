@@ -30,5 +30,5 @@ export const userSchema = object({
     .min(6, 'Must be 6 characters or more')
     .max(16, 'Must be 16 characters or less')
     .test('is username available', USER_TAKEN, yupTestUserValidation),
-  email: string().optional().default('').email('Invalid email address'),
+  email: string().email('Invalid email address').optional().default(''),
 })

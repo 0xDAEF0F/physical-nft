@@ -28,18 +28,12 @@ export default async function handler(
   if (!publicAddress) return res.status(401).send(PK_RETRIEVAL_FAILURE)
   if (!utils.isAddress(publicAddress)) return res.status(400).send(INVALID_PK)
 
-  const [err, resValues] = await to(
-    Promise.all([
-      isUserInAuthDb(publicAddress),
-      isUserInFirestoreDb(publicAddress),
-    ])
-  )
-  if (err instanceof Error) return res.status(503).send(FETCH_USER_DB_ERROR)
-  if (resValues) {
-    const [userInAuth, userInFirestoreDb] = resValues
-    if (!userInAuth || !userInFirestoreDb)
-      return res.status(401).send(USER_DOES_NOT_EXIST)
-  }
+  const [userInAuth, userInFirestoreDb] = await Promise.all([
+    isUserInAuthDb(publicAddress),
+    isUserInFirestoreDb(publicAddress),
+  ])
+  if (!userInAuth || !userInFirestoreDb)
+    return res.status(401).send(USER_DOES_NOT_EXIST)
 
   const updatedNonce = await updateNonceAndReturnIfSuccess(publicAddress)
   if (!updatedNonce) return res.status(503).send(USER_UPDATE_ERROR)

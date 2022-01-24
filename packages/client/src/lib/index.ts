@@ -24,9 +24,9 @@ const firebaseApp = createFirebaseApp(firebaseConfig)
 export const auth = getAuth(firebaseApp)
 export const db = getFirestore(firebaseApp)
 
-// if (location.host.includes('localhost')) {
-//   connectAuthEmulator(auth, 'http://localhost:9099')
-//   connectFirestoreEmulator(db, 'localhost', 8080)
-// }
+if (location.host.includes('localhost')) {
+  connectAuthEmulator(auth, 'http://localhost:9099')
+  connectFirestoreEmulator(db, 'localhost', 8080)
+}
 
 export default firebaseApp

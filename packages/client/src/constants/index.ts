@@ -1,8 +1,22 @@
+import { CreateRequest } from 'firebase-admin/auth'
+import { User } from './schema'
+
 export type PublicAddress = string
 export type Nonce = number
 export type SignedMessage = string
 export type MessageForUserToSign = string
 export type Username = string
+export type Jwt = string
+
+export type AuthFirebaseUser = {
+  uid: string
+  displayName: string
+  // disabled: boolean
+  email?: string
+  emailVerified?: boolean
+}
+
+export const nextApi = 'http://localhost:3000/api'
 
 const customMessages = {
   CREATE_USER_SUCCESS: 'Congratulations! User has been created.',
@@ -21,6 +35,7 @@ const customMessages = {
   CREDENTIALS_MISSING: 'Provided credentials are incomplete please try again.',
   INVALID_PK: 'Provided address is invalid, please try again.',
   USER_DOES_NOT_EXIST: 'Provided address does not exist within our users.',
+  JWT_CREATION_ERROR: 'Failed to create authentication token.',
   CREATE_USER_ERROR: 'Sorry, user creation failure. Try again.',
   FETCH_USER_DB_ERROR: 'User could not be retrieved from database.',
   USER_UPDATE_ERROR: 'User could not be updated, plase try again.',
@@ -38,6 +53,7 @@ export const {
   CREATE_USER_SUCCESS,
   FETCH_USER_DB_ERROR,
   CREATE_USER_ERROR,
+  JWT_CREATION_ERROR,
   USER_TAKEN,
   INVALID_PK,
   CACC_TO_LOGIN,
