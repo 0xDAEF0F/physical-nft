@@ -20,7 +20,7 @@ export default function HamburgerMenu() {
         leaveFrom='transform opacity-100 scale-100'
         leaveTo='transform opacity-0 scale-95'
       >
-        <Menu.Items className='absolute text-center ml-auto mr-auto right-0 mt-1 rounded-md shadow-md ring-opacity-5 w-full'>
+        <Menu.Items className='absolute text-center self-center justify-items-center ml-auto mr-auto right-0 mt-1 rounded-md shadow-md ring-opacity-5 w-full'>
           <div className='px-1 py-1'>
             <Menu.Item>
               <SearchBar

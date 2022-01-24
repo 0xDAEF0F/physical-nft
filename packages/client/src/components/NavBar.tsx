@@ -13,11 +13,11 @@ export default function NavBar() {
           placeholder='Search songs, albums, artists and accounts'
           extraClass='hidden sm:flex px-10 xl:pl-40'
         />
-        <ul className='hidden lg:flex w-4/12 justify-center'>
+        <ul className='hidden lg:flex w-4/12 justify-end'>
           <DivLink to='/Explore' title='Explore' />
           <DivLink to='/Stats' title='Stats' />
-          <ConnectWallet />
         </ul>
+        <ConnectWallet xClass='hidden lg:flex mx-5' />
         <div className='lg:hidden pr-5'>
           <HamburgerMenu />
         </div>
