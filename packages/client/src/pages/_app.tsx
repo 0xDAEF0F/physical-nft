@@ -4,7 +4,6 @@ import store from 'src/app/store'
 import { Provider } from 'react-redux'
 import NavBar from '@/components/NavBar'
 import { Toaster } from 'react-hot-toast'
-import Footer from '@/components/Footer'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

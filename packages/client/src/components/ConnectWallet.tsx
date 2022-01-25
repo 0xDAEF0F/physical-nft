@@ -25,12 +25,17 @@ import {
 import { useRouter } from 'next/router'
 import axios, { AxiosError } from 'axios'
 import { logClientErr } from '@/utilities/client-error-handlers'
+import { auth } from '../lib'
+import { useAppDispatch, useAppSelector } from 'src/app/hooks'
+import { removeToken, selectToken, setToken } from 'src/features/user/userSlice'
 
 type Props = {
   xClass?: string
 }
 
 export default function ConnectWallet({ xClass }: Props) {
+  const currToken = useAppSelector(selectToken)
+  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
 
@@ -39,6 +44,16 @@ export default function ConnectWallet({ xClass }: Props) {
   }
   function openModal() {
     setIsOpen(true)
+  }
+
+  function signOut() {
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(removeToken)
+        toast.success('successfully logged out.')
+      })
+      .catch((err) => console.error(err))
   }
 
   async function handleLoginFlow() {
@@ -93,8 +108,9 @@ export default function ConnectWallet({ xClass }: Props) {
     if (!resFromApiAuth) return
 
     const jwt = resFromApiAuth?.data
+    dispatch(setToken(jwt))
     localStorage.setItem('token', jwt)
-    return toast.success('AUTHENTICATED JWT SAVED IN LOCAL STORAGE')
+    closeModal()
   }
 
   return (
