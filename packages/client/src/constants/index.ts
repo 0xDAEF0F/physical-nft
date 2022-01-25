@@ -1,6 +1,3 @@
-import { CreateRequest } from 'firebase-admin/auth'
-import { User } from './schema'
-
 export type PublicAddress = string
 export type Nonce = number
 export type SignedMessage = string

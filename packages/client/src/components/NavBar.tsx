@@ -4,18 +4,24 @@ import SearchBar from './SearchBar'
 import HamburgerMenu from './HamburgerMenu'
 import ConnectWallet from './ConnectWallet'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
-import { removeToken, selectToken } from 'src/features/user/userSlice'
+import { selectToken, clearUserInfo } from 'src/features/user/userSlice'
 
 export default function NavBar() {
   const userJwt = useAppSelector(selectToken)
   const dispatch = useAppDispatch()
+
+  function logout() {
+    if (!window) return
+    localStorage.clear()
+    dispatch(clearUserInfo())
+  }
 
   const connectWalletOrSignOut = !userJwt ? (
     <ConnectWallet xClass='hidden lg:flex mx-5' />
   ) : (
     <>
       <button
-        onClick={() => dispatch(removeToken())}
+        onClick={logout}
         className='bg-black p-2 text-white rounded-xl  shadow-xl hidden lg:flex mx-5'
       >
         Logout
