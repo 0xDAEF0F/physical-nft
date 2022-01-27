@@ -58,7 +58,7 @@ export default function NavBar() {
         <div className='flex h-full justify-between align-middle pl-5 items-center sticky'>
           <AppLogo extraClass={''} />
           <SearchBar
-            placeholder='Search songs, albums, artists and accounts...'
+            placeholder='Search songs, albums, artists and accounts'
             extraClass='hidden sm:flex px-10 xl:pl-40'
           />
           <ul className='hidden lg:flex w-4/12 justify-end'>
