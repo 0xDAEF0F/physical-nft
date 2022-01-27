@@ -1,7 +1,7 @@
 import AppLogo from './Logo'
 import DivLink from './DivLink'
 import SearchBar from './SearchBar'
-import { IoMenu, IoCloseOutline } from 'react-icons/io5'
+import { IoMenu, IoClose } from 'react-icons/io5'
 import ConnectWallet from './ConnectWallet'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { selectToken, clearUserInfo } from 'src/features/user/userSlice'
@@ -40,14 +40,14 @@ export default function NavBar() {
     setIsOpen(true)
   }
 
-  const HamburgerIconOrCancel = isOpen ? (
-    <button onClick={closeMenu} className='flex items-center' type='button'>
+  const HamburgerIconOrCancel = !isOpen ? (
+    <button onClick={openMenu} className='flex items-center' type='button'>
       <IoMenu size={30} />
     </button>
   ) : (
     <>
-      <button onClick={openMenu} className='flex items-center' type='button'>
-        <IoCloseOutline size={30} />
+      <button onClick={closeMenu} className='flex items-center' type='button'>
+        <IoClose size={30} />
       </button>
     </>
   )
