@@ -69,7 +69,7 @@ export default function NavBar() {
           <div className='lg:hidden mr-5'>{HamburgerIconOrCancel}</div>
         </div>
       </nav>
-      {!isOpen ? <HamburgerMenu /> : null}
+      {isOpen ? <HamburgerMenu /> : null}
     </div>
   )
 }
