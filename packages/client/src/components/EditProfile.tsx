@@ -207,13 +207,13 @@ function EditProfile() {
                   placeholder='Site'
                 />
               </div>
-            </div>
-          </div>
-          <div className='md:inline-flex w-full space-y-4 md:space-y-0 p-8 text-gray-500 justify-end'>
-            <div className='md:w-2/12 md:pl-6'>
-              <button className='text-white bg-blue-500 w-full mx-auto max-w-sm rounded-md text-center bg-blue-00 py-2 px-4 inline-flex items-center focus:outline-none md:float-right justify-center'>
-                Save
-              </button>
+              <div className='md:inline-flex w-full space-y-4 md:space-y-0 pt-10 text-gray-500 justify-end'>
+                <div className=''>
+                  <button className='text-white bg-blue-500 w-full mx-auto max-w-sm rounded-md text-center bg-blue-00 py-2 px-4 inline-flex items-center focus:outline-none md:float-right justify-center'>
+                    Save
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

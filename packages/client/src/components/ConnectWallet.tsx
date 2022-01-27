@@ -105,7 +105,7 @@ export default function ConnectWallet({ xClass }: Props) {
       <button
         type='button'
         onClick={openModal}
-        className={`cursor-pointer bg-blue-600 text-white hover:text-white block px-4 py-2 rounded-full text-base font-medium whitespace-nowrap mx-5 ${xClass}`}
+        className={`cursor-pointer bg-blue-600 text-white block px-4 py-3 rounded-full text-base font-medium whitespace-nowrap ${xClass}`}
       >
         Connect Wallet
       </button>
