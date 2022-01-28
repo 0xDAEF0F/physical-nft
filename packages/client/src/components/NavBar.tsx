@@ -54,12 +54,12 @@ export default function NavBar() {
 
   return (
     <div>
-      <nav className='shadow-md sticky h-16'>
-        <div className='flex h-full justify-between align-middle pl-5 items-center sticky'>
+      <nav className='shadow-md h-16'>
+        <div className='flex h-full justify-between align-middle ml-5 items-center'>
           <AppLogo extraClass={''} />
           <SearchBar
             placeholder='Search songs, albums, artists and accounts'
-            extraClass='hidden sm:flex px-10 xl:pl-40'
+            extraClass='hidden sm:flex mx-10 xl:ml-40'
           />
           <ul className='hidden lg:flex w-4/12 justify-end'>
             <DivLink to='/explore' title='Explore' />
