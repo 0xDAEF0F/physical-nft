@@ -10,7 +10,7 @@ function Footer() {
           <Logo extraClass={''} />
         </div>
         <div className='flex-1 pt-10'>
-          <div className='grid gap-2 content-start '>
+          <div className='grid gap-2 justify-start'>
             <DivLink
               title={'Help Center'}
               to={'/helpcenter'}
@@ -31,7 +31,7 @@ function Footer() {
           </div>
         </div>
         <div className='flex-1 pt-10'>
-          <div className='grid gap-2 content-start'>
+          <div className='grid gap-2 justify-start'>
             <a href='' className='font-light' target='_blank' title='Discord'>
               Discord
             </a>
@@ -66,7 +66,9 @@ function Footer() {
           </div>
         </div>
       </div>
-      <p className='mt-10  antialiased font-light'>© 2022 Physical-NFT Inc.</p>
+      <p className='ml-5 my-10  antialiased font-light'>
+        © 2022 Physical-NFT Inc.
+      </p>
     </footer>
   )
 }

@@ -53,8 +53,8 @@ export default function NavBar() {
   )
 
   return (
-    <div>
-      <nav className='shadow-md h-16'>
+    <div className='fixed w-full z-50'>
+      <nav className='shadow-md h-16 bg-white'>
         <div className='flex h-full justify-between align-middle ml-5 items-center'>
           <AppLogo extraClass={''} />
           <SearchBar

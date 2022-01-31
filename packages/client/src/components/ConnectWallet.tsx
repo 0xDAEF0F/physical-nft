@@ -113,7 +113,7 @@ export default function ConnectWallet({ xClass }: Props) {
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as='div'
-          className='fixed inset-0 z-10 overflow-y-auto'
+          className='fixed inset-0 z-50 overflow-y-auto'
           onClose={closeModal}
         >
           <Dialog.Overlay className='fixed inset-0 backdrop-blur-md backdrop-brightness-50' />
