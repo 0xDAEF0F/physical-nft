@@ -53,31 +53,34 @@ export default function NavBar() {
   )
 
   return (
-    <div className='fixed w-full z-50'>
-      <nav className='shadow-md h-16 bg-white'>
-        <div className='flex h-full justify-between align-middle ml-5 items-center'>
-          <AppLogo extraClass={''} />
-          <SearchBar
-            placeholder='Search songs, albums, artists and accounts'
-            extraClass='hidden sm:flex mx-10 xl:ml-40'
-          />
-          <ul className='hidden lg:flex w-4/12 justify-end'>
-            <DivLink
-              to='/explore'
-              title='Explore'
-              xClass='hover:text-black text-gray-500 font-medium'
+    <div>
+      <div className='fixed w-full z-50'>
+        <nav className='shadow-md h-16 bg-white'>
+          <div className='flex h-full justify-between align-middle ml-5 items-center'>
+            <AppLogo extraClass={''} />
+            <SearchBar
+              placeholder='Search songs, albums, artists and accounts'
+              extraClass='hidden sm:flex mx-10 xl:ml-40'
             />
-            <DivLink
-              to='/stats'
-              title='Stats'
-              xClass='hover:text-black text-gray-500 font-medium ml-5'
-            />
-          </ul>
-          {connectWalletOrSignOut}
-          <div className='lg:hidden mr-5'>{HamburgerIconOrCancel}</div>
-        </div>
-      </nav>
-      {isOpen ? <HamburgerMenu /> : null}
+            <ul className='hidden lg:flex w-4/12 justify-end'>
+              <DivLink
+                to='/explore'
+                title='Explore'
+                xClass='hover:text-black text-gray-500 font-medium'
+              />
+              <DivLink
+                to='/stats'
+                title='Stats'
+                xClass='hover:text-black text-gray-500 font-medium ml-5'
+              />
+            </ul>
+            {connectWalletOrSignOut}
+            <div className='lg:hidden mr-5'>{HamburgerIconOrCancel}</div>
+          </div>
+        </nav>
+        {isOpen ? <HamburgerMenu /> : null}
+      </div>
+      <div className='py-10'></div>
     </div>
   )
 }
