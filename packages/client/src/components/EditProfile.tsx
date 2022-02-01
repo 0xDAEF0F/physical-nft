@@ -2,7 +2,7 @@ import React from 'react'
 
 function EditProfile() {
   return (
-    <section className='py-20 h-screen'>
+    <section className='py-20'>
       <div className='mx-auto container max-w-3xl md:w-3/4 px-5'>
         <p className='text-4xl font-bold mb-10 ml-5'>Edit your profile</p>
 

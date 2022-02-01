@@ -82,9 +82,9 @@ async function getArtistAlbumSongs(artist: string, album: string) {
   if (!res) throw new Error('Failed to fetch from API.')
   const songsArrForFirestore = res.data.album.tracks.track.map((a) => {
     return {
-      // name: a.name,
+      name: a.name,
       // need all artists that starred on the song,
-      // album,
+      album,
     } as SongDb
   })
   return songsArrForFirestore

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import EditProfile from '@/components/EditProfile'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { selectToken, setAuthUserInfo } from 'src/features/user/userSlice'
 import { signInWithCustomToken } from 'firebase/auth'
 import { auth } from '@/lib/index'
+import Profile from '@/components/Profile'
 
 export default function Index() {
   const jwt = useAppSelector(selectToken)
@@ -27,7 +27,7 @@ export default function Index() {
 
   return (
     <div>
-      <EditProfile />
+      <Profile />
     </div>
   )
 }

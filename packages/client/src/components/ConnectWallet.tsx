@@ -105,7 +105,7 @@ export default function ConnectWallet({ xClass }: Props) {
       <button
         type='button'
         onClick={openModal}
-        className={`cursor-pointer bg-blue-600 text-white block px-4 py-3 rounded-full text-base font-medium whitespace-nowrap ${xClass}`}
+        className={`cursor-pointer bg-blue-600 text-white block px-4 py-2 rounded-full text-base font-medium whitespace-nowrap ${xClass}`}
       >
         Connect Wallet
       </button>
@@ -113,7 +113,7 @@ export default function ConnectWallet({ xClass }: Props) {
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as='div'
-          className='fixed inset-0 z-10 overflow-y-auto'
+          className='fixed inset-0 z-50 overflow-y-auto'
           onClose={closeModal}
         >
           <Dialog.Overlay className='fixed inset-0 backdrop-blur-md backdrop-brightness-50' />
