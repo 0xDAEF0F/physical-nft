@@ -12,7 +12,7 @@ function Profile() {
   }
 
   return (
-    <div>
+    <div className=''>
       <div className='flex justify-end mr-10'>
         <Link href='/settings'>
           <a
@@ -24,9 +24,9 @@ function Profile() {
           </a>
         </Link>
       </div>
-      <div className='flex justify-center text-center'>
-        <div className='text-center'>
-          <label className='cursor-pointer rounded-full'>
+      <div className='flex justify-center '>
+        <div className='flex flex-col text-center'>
+          <label className='rounded-full'>
             <Image
               className='h-32 w-32 rounded-full ring-2 ring-white bg-black'
               src='https://www.cnet.com/a/img/FOblZHSSQ9sBlVbdd0qIxrLRIAI=/940x0/2021/12/13/d319cda7-1ddd-4855-ac55-9dcd9ce0f6eb/unnamed.png'
@@ -36,38 +36,40 @@ function Profile() {
               height={100}
               layout='intrinsic'
             />
-            <input
+            {/* <input
               type='file'
               name='myImage'
               accept='image/*'
               className='hidden'
-            />
+            /> */}
           </label>
 
           <h2 className='text-2xl font-bold'>@Drake</h2>
-          <button
-            onClick={copy2Clipboard}
-            title='Copy'
-            className='bg-gray-100 rounded-full p-2'
-          >
-            <div className='justify-between items-center flex'>
-              <Image
-                src={ethereumLogo}
-                alt='MetaMask logo'
-                width={15}
-                height={15}
-              ></Image>
-              <p className='font-semibold ml-1 text-gray-600'>
-                0x8a1b5f0ac1c070be13559df36c3426671f2b0885
-              </p>
-            </div>
-          </button>
-          <div className='flex justify-center text-lg'>
-            <div className='flex-col flex mr-5 font-semibold'>
+          <div className=''>
+            <button
+              onClick={copy2Clipboard}
+              title='Copy'
+              className='bg-gray-100 rounded-full p-2 w-52 h-auto'
+            >
+              <div className='flex justify-between items-center'>
+                <Image
+                  src={ethereumLogo}
+                  alt='MetaMask logo'
+                  width={30}
+                  height={30}
+                ></Image>
+                <p className='font-semibold ml-1 text-gray-600 truncate'>
+                  0x8a1b5f0ac1c070be13559df36c3426671f2b0885
+                </p>
+              </div>
+            </button>
+          </div>
+          <div className='flex justify-center text-center text-lg'>
+            <div className='mr-5 font-semibold'>
               <p>0</p>
-              <p className='text-gray-500'>Followers</p>
+              <p className='text-gray-500'>Following</p>
             </div>
-            <div className='flex-col flex ml-5 font-semibold'>
+            <div className='ml-5 font-semibold'>
               <p>0</p>
               <p className='text-gray-500'>Followers</p>
             </div>
