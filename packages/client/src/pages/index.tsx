@@ -23,7 +23,7 @@ export default function Index() {
         dispatch(setAuthUserInfo(dataToPersistInReduxStore))
       })
       .catch((err) => console.error(err))
-  }, [jwt])
+  }, [jwt, dispatch])
 
   return (
     <div>
