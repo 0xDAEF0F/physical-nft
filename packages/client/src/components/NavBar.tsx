@@ -80,7 +80,7 @@ export default function NavBar() {
         </nav>
         {isOpen ? <HamburgerMenu /> : null}
       </div>
-      <div className='py-10'></div>
+      <div className='py-8'></div>
     </div>
   )
 }

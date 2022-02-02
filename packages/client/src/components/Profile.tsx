@@ -6,14 +6,15 @@ import Link from 'next/link'
 import { IoSettings } from 'react-icons/io5'
 
 function Profile() {
+  let publicKey = '0x8a1b5f0ac1c070be13559df36c3426671f2b0885'
   function copy2Clipboard() {
-    navigator.clipboard.writeText('0x8A1b5F0ac1C070Be13559Df36C3426671F2B0885')
+    navigator.clipboard.writeText(publicKey)
     toast.success('Copied to clipboard')
   }
 
   return (
     <div className=''>
-      <div className='flex justify-end mr-10'>
+      <div className='flex justify-end mr-32'>
         <Link href='/settings'>
           <a
             className={
@@ -58,8 +59,8 @@ function Profile() {
                   width={30}
                   height={30}
                 ></Image>
-                <p className='font-semibold ml-1 text-gray-600 truncate'>
-                  0x8a1b5f0ac1c070be13559df36c3426671f2b0885
+                <p className='font-semibold ml-1 text-gray-600 truncate hover:text-black'>
+                  {publicKey}
                 </p>
               </div>
             </button>
