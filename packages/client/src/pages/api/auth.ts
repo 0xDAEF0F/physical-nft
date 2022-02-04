@@ -40,7 +40,9 @@ export default async function handler(
   if (signerAddress !== publicAddress)
     return res.status(401).send(SIGNED_NONCE_INVALID)
 
-  const updatedNonce = await updateNonceAndReturnIfSuccess(publicAddress)
+  const [, updatedNonce] = await to(
+    updateNonceAndReturnIfSuccess(publicAddress)
+  )
   if (!updatedNonce) return res.status(503).send(USER_UPDATE_ERROR)
 
   const [_, jwt] = await to(auth.createCustomToken(publicAddress))

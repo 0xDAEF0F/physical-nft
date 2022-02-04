@@ -1,4 +1,5 @@
 // this file intention is to seed the DB.
+import { AlbumDb, SongDb } from '@/constants/firestore-types'
 import { PublicAddress } from '@/constants/index'
 import {
   GetTopAlbumsRes,
@@ -8,60 +9,35 @@ import {
 import { User } from '@/constants/schema'
 import to from 'await-to-js'
 import axios from 'axios'
+import {
+  flatten,
+  flattenDeep,
+  map,
+  orderBy,
+  compact,
+  range,
+  forEach,
+} from 'lodash'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-type UserDb = User & {
-  nonce: number
-  email?: string
-  likes?: string[]
-  collection?: string[]
-}
-
-type ArtistDb = {
-  name: string
-  image: string
-  albums: AlbumDb[]
-  mbid: string
-  isVerified: boolean
-}
-
-type SongDb = {
-  name: string
-  artist: string[]
-  album: string
-  mbid: string
-  likes?: PublicAddress[]
-  image?: string
-  currentBid?: number
-  highestBidder?: PublicAddress
-  owner?: PublicAddress
-}
-
-type AlbumDb = {
-  name: string
-  image: string
-  released: number
-  genre: string[]
-  mbid: string
-  starring?: string[]
-}
-
 const lastFmBaseUrl = `https://ws.audioscrobbler.com/2.0`
-const lastFmApiQueryParam = `api_key=${process.env.NEXT_PUBLIC_LASTFM_API_KEY}`
+const lastFmApiQueryParam = `api_key=${process.env.LASTFM_API_KEY}`
 
-async function getTopArtistsArrByPage(page: number) {
-  const getTopArtistsUrl = `${lastFmBaseUrl}?method=chart.gettopartists&format=json&${lastFmApiQueryParam}&page=${page}`
-  const [_, res] = await to(axios.get<GetTopArtistsRes>(getTopArtistsUrl))
-  if (!res) throw new Error('Failed to fetch from API.')
-  const artistArrForFirestore = res.data.artists.artist.map((a) => {
-    return {
-      name: a.name,
-      image: a.image[a.image.length - 1]['#text'],
-      isVerified: false,
-    } as ArtistDb
-  })
-  return artistArrForFirestore
+async function getTopArtistsByPageLastFM(pages: number) {
+  const getTopArtistsUrl = `${lastFmBaseUrl}?method=chart.gettopartists&format=json&${lastFmApiQueryParam}`
+
+  return Promise.all(
+    range(1, pages + 1).map(async (i) => {
+      const [err, res] = await to(
+        axios.get<GetTopArtistsRes>(getTopArtistsUrl + `&page=${i}`)
+      )
+      if (!res) throw new Error(err?.message)
+
+      return res.data.artists.artist
+    })
+  )
 }
+
 async function getArtistTopAlbumsArrByPage(artist: string, page: number) {
   const getTopAlbumsUrl = `${lastFmBaseUrl}?method=artist.gettopalbums&format=json&${lastFmApiQueryParam}&artist=${artist}&page=${page}`
   const [_, res] = await to(axios.get<GetTopAlbumsRes>(getTopAlbumsUrl))
@@ -94,5 +70,5 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  res.send('hello world')
+  res.send('Hello World!')
 }

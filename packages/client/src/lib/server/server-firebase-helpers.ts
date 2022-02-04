@@ -27,8 +27,9 @@ export async function createUserNonce(pa: PublicAddress) {
 export async function updateNonceAndReturnIfSuccess(pa: PublicAddress) {
   const userRef = db.collection('users').doc(pa)
   const newNonce = generateNonce()
-  const timestamp = await userRef.update({ nonce: newNonce })
-  if (timestamp) return newNonce
+  const [err, timestamp] = await to(userRef.update({ nonce: newNonce }))
+  if (!timestamp) throw new Error(err?.message)
+  return timestamp
 }
 
 export async function getUserData(pa: PublicAddress) {
@@ -36,3 +37,5 @@ export async function getUserData(pa: PublicAddress) {
   const userData = await userRef.get()
   if (userData.exists) return userData
 }
+
+export async function createArtist(artist: any) {}
