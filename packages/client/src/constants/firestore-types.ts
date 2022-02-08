@@ -21,7 +21,7 @@ type ArtistDb = {
   stageName: string
   realName?: string
   image: string
-  albums?: AlbumDb[]
+  albums?: string[]
   avatar?: string
   isVerified: boolean
   birthDate?: Date
@@ -31,6 +31,7 @@ type ArtistDb = {
 type SongDb = {
   mbid: string
   title: string
+  duration: number
   artist: string[]
   genre: string[]
   album: string
@@ -42,11 +43,11 @@ type SongDb = {
 }
 
 type AlbumDb = {
+  mbid: string
   name: string
   image: string
   released: number
   genre: string[]
-  mbid: string
   starring?: string[]
 }
 

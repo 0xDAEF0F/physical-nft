@@ -12,6 +12,7 @@
     "test:ci": "jest --ci"
   },
   "dependencies": {
+    "@graphql-tools/schema": "^8.3.1",
     "@headlessui/react": "^1.4.2",
     "@metamask/detect-provider": "^1.2.0",
     "@reduxjs/toolkit": "^1.7.1",
