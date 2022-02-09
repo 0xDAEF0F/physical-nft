@@ -2,6 +2,7 @@ import { ArtistDb } from '@/constants/firestore-types'
 import { CREATE_USER_ERROR, PublicAddress } from '@/constants/index'
 import { generateNonce } from '@/utilities/index'
 import to from 'await-to-js'
+import { flatten, uniqBy } from 'lodash'
 import { db, auth } from './index'
 
 export async function isUserInFirestoreDb(pa: PublicAddress) {
@@ -44,8 +45,18 @@ export async function createArtist(artist: ArtistDb) {
     .collection('artists')
     .where('stageName', '==', artist.stageName)
     .get()
-  if (!artistQuery.empty) return 'Artist Exists' //Maybe update check if values diff?
+  if (!artistQuery.empty) return 'Artist Exists'
   const [err, ref] = await to(db.collection('artists').add(artist))
   if (!ref) throw new Error(err?.message)
   return ref.id
+}
+
+export async function createArtistsBatch(artists: ArtistDb[][]) {
+  const batch = db.batch()
+  const noDuplicateArr = uniqBy(flatten(artists), 'stageName')
+  noDuplicateArr.forEach((artist) => {
+    const artistRef = db.collection('artists').doc()
+    batch.create(artistRef, artist)
+  })
+  return batch.commit()
 }

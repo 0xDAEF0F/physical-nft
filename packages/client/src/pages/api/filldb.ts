@@ -5,7 +5,11 @@ import {
   GetTopArtistsRes,
   GetAlbumInfoRes,
 } from '@/constants/lastfm-types'
-import { createArtist } from '@/lib/server/server-firebase-helpers'
+import { db } from '@/lib/server'
+import {
+  createArtist,
+  createArtistsBatch,
+} from '@/lib/server/server-firebase-helpers'
 import to from 'await-to-js'
 import axios from 'axios'
 import { flatten, map, orderBy, range } from 'lodash'
@@ -64,12 +68,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // const [err, artists] = await to(getTopArtistsByPageLastFM(4))
-  // if (err) return res.status(500).send('Error fetching')
-  // return Promise.all(
-  //   map(flatten(artists), (artist) => {
-  //     createArtist(artist)
-  //   })
-  // )
-  return res.status(200).send('OK')
+  // const [, artists] = await to(getTopArtistsByPageLastFM(4))
+  // if (!artists) return res.status(500).send('Error fetching')
+  // const [, writeResult] = await to(createArtistsBatch(artists))
+  // if (!writeResult) return res.status(500).send('Error Creating users in DB.')
+  // return res.status(200).send(writeResult)
+  return res.send('hello world')
 }
