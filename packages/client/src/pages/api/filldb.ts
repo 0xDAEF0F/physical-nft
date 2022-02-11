@@ -1,15 +1,10 @@
-// this file intention is to seed the DB.
-import { AlbumDb, ArtistDb, SongDb } from '@/constants/firestore-types'
+import { AlbumDb, ArtistDb } from '@/constants/firestore-types'
 import {
   GetTopAlbumsRes,
   GetTopArtistsRes,
   GetAlbumInfoRes,
 } from '@/constants/lastfm-types'
-import { db } from '@/lib/server'
-import {
-  createArtist,
-  createArtistsBatch,
-} from '@/lib/server/server-firebase-helpers'
+import { createArtistsInBatches } from '@/lib/server/server-firebase-helpers'
 import to from 'await-to-js'
 import axios from 'axios'
 import { flatten, map, orderBy, range } from 'lodash'
@@ -31,11 +26,12 @@ async function getTopArtistsByPageLastFM(pages: number) {
 
       return map(
         orderBy(res.data.artists.artist, ['playcount'], ['desc']),
-        ({ mbid, name, image }) =>
+        ({ mbid, name, image, playcount }) =>
           ({
             mbid,
             stageName: name,
             image: image[image.length - 1]['#text'],
+            playcount: Number(playcount),
           } as ArtistDb)
       )
     })
@@ -58,20 +54,16 @@ async function getArtistTopAlbumsArrByPage(artist: string, page: number) {
 }
 async function getArtistAlbumInfo(artist: string, album: string) {
   const getAlbumInfo = `${lastFmBaseUrl}?method=album.getinfo&format=json&${lastFmApi}&artist=${artist}&album=${album}`
-  const [err, res] = await to(axios.get<GetAlbumInfoRes>(getAlbumInfo))
+  const [, res] = await to(axios.get<GetAlbumInfoRes>(getAlbumInfo))
   if (!res) throw new Error('Failed to fetch from API.')
   const albumInfo = res.data.album
   return albumInfo
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // const [, artists] = await to(getTopArtistsByPageLastFM(4))
-  // if (!artists) return res.status(500).send('Error fetching')
-  // const [, writeResult] = await to(createArtistsBatch(artists))
-  // if (!writeResult) return res.status(500).send('Error Creating users in DB.')
-  // return res.status(200).send(writeResult)
-  return res.send('hello world')
+export default async function handler(_: NextApiRequest, res: NextApiResponse) {
+  const [, artists] = await to(getTopArtistsByPageLastFM(1))
+  if (!artists) return res.status(500).send('Error fetching')
+  const [err, resul] = await to(createArtistsInBatches(artists))
+  if (!resul) return res.status(500).send(err?.message)
+  return res.status(200).send(flatten(resul))
 }

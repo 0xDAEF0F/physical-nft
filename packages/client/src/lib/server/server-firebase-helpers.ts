@@ -2,7 +2,7 @@ import { ArtistDb } from '@/constants/firestore-types'
 import { CREATE_USER_ERROR, PublicAddress } from '@/constants/index'
 import { generateNonce } from '@/utilities/index'
 import to from 'await-to-js'
-import { flatten, uniqBy } from 'lodash'
+import { flatten, uniqBy, chunk } from 'lodash'
 import { db, auth } from './index'
 
 export async function isUserInFirestoreDb(pa: PublicAddress) {
@@ -51,12 +51,18 @@ export async function createArtist(artist: ArtistDb) {
   return ref.id
 }
 
-export async function createArtistsBatch(artists: ArtistDb[][]) {
-  const batch = db.batch()
-  const noDuplicateArr = uniqBy(flatten(artists), 'stageName')
-  noDuplicateArr.forEach((artist) => {
-    const artistRef = db.collection('artists').doc()
-    batch.create(artistRef, artist)
+export async function createArtistsInBatches(artists: ArtistDb[][]) {
+  const artistArrUnique = uniqBy(flatten(artists), 'stageName')
+  const inChunksOf500Artists = chunk(artistArrUnique, 500)
+  const writeResults = inChunksOf500Artists.map(async (chunk) => {
+    const batch = db.batch()
+    chunk.forEach((artist) => {
+      const artistRef = db.collection('artists').doc()
+      batch.create(artistRef, artist)
+    })
+    const [err, res] = await to(batch.commit())
+    if (!res) throw new Error(err?.message)
+    return res
   })
-  return batch.commit()
+  return Promise.all(writeResults)
 }

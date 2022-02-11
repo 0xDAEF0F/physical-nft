@@ -19,6 +19,7 @@ type UserDb = {
 type ArtistDb = {
   mbid: string
   stageName: string
+  playcount: number
   realName?: string
   image: string
   albums?: string[]
