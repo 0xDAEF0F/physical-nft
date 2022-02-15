@@ -155,7 +155,7 @@ export default function ConnectWallet({ xClass }: Props) {
                 </Dialog.Title>
                 <div className='mt-10'>
                   <button
-                    className='bg-gradient-to-r from-orange-500 to-orange-300 py-4 px-4 rounded-lg transform transition duration-500 hover:scale-105 w-full'
+                    className='bg-gradient-to-r from-orange-500 to-orange-300 py-4 px-4 rounded-lg transform transition duration-500 hover:scale-105 w-full focus:outline-none'
                     type='button'
                     onClick={handleLoginFlow}
                   >

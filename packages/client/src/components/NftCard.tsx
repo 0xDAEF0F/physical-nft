@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import { IoHeartOutline } from 'react-icons/io5'
+import ethereumLogo from 'src/assets/ethereum.svg'
 
 const songExample = {
   id: 1,
@@ -15,9 +17,10 @@ const songExample = {
   imageAlt: 'Drake album',
   price: '100',
   time: '12h 30m 50s',
+  likes: '2000',
 }
 
-const BiddingCard = () => {
+const NftCard = () => {
   return (
     <div className='bg-black rounded-lg transform transition duration-500 hover:scale-105 w-fit '>
       {/* Owner Logo Part */}
@@ -76,6 +79,22 @@ const BiddingCard = () => {
                 </p>
               </div>
             </div>
+
+            <div className='flex justify-between mt-4'>
+              <Image
+                src={ethereumLogo}
+                alt='MetaMask logo'
+                width={20}
+                height={20}
+              ></Image>
+              <button className='flex items-center'>
+                <IoHeartOutline
+                  className='mr-1 text-white hover:text-red-500'
+                  size={20}
+                />
+                <p className='text-gray-400'>{songExample.likes}</p>
+              </button>
+            </div>
           </div>
         </a>
       </div>
@@ -83,4 +102,4 @@ const BiddingCard = () => {
   )
 }
 
-export default BiddingCard
+export default NftCard

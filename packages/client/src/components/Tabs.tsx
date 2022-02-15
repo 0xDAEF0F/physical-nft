@@ -1,16 +1,25 @@
 import { useState } from 'react'
 import { Tab } from '@headlessui/react'
+import NftGroup from './NftGroup'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 function Owned() {
-  return <div>1</div>
+  return (
+    <div>
+      <NftGroup />
+    </div>
+  )
 }
 
 function Favorited() {
-  return <div>2</div>
+  return (
+    <div>
+      <NftGroup />
+    </div>
+  )
 }
 
 function Activity() {
@@ -25,7 +34,7 @@ export default function Tabs() {
   })
 
   return (
-    <div className='w-full px-5 py-8'>
+    <div className='w-full px-5 '>
       <Tab.Group>
         <div className='flex justify-center'>
           <Tab.List className='w-full lg:w-6/12 flex p-1 space-x-1 bg-gray-200 rounded-xl'>
@@ -49,7 +58,9 @@ export default function Tabs() {
         </div>
         <Tab.Panels className='mt-2'>
           {Object.values(categories).map((category, idx) => (
-            <Tab.Panel key={idx}>{category}</Tab.Panel>
+            <Tab.Panel className='focus:outline-none' key={idx}>
+              {category}
+            </Tab.Panel>
           ))}
         </Tab.Panels>
       </Tab.Group>
