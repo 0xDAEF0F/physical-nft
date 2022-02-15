@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "physical-nft",
+  "private_key_id": "8439653ccb189b78b244e000fec44893f45555b9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCumc2ruHl0YDlV\n6jdblrLmnyXqboU1f789pSP4+SuzsrOUohwjPvuA5siHdt6OrjiK7Znp3XYjqDDv\nfg1E7LrpfibP/WEf9k4fwUtaJ0m390Z0GQQuJec2S1oF5ypp6aYxkf8ehfpbWGTt\nnJ2nQgUrPrdgCaIyF9jT2alukO0eYqBqqEYTozdEQIPGPm9T8ZSB8PYgZopwipF7\nGVsRcAA1Bx/4XCAYZomPB0WnPNosdglH7b5nrHpKY8pm6Q5QTUZO6OeOjB78J/lj\n9jlAEjLbv+pqlGrO+HVCdsGdxnizQYD5gtMmQpIdX61ILFBn3nkPM4t3bgTTaa6V\ncQWKT01PAgMBAAECggEAOUCx0mdRXDnZUzTUJjJKQ5lYI4FOKPbUzPAD1bZPAEPO\n4yQtOdmDOwdyJglyfTLf056J48f830Bdm4qn6zv9Jmd5bqZVXNe1UnBdtxg+8hYh\nghxZ5JAFOyaGRH1CySwWlRaco3OnXqCjp869W4UokL+l/dXq26Y6MW2kQ18+gcGl\nrB97oiylXSF6VWFzB/vcN+NaTUAyEGe3yIp8s0gbj86I5OKrtI9UnwOfbPmb/7Js\nTDc/TWTdwah5vnvufj5fU6yxboLqj9er/S5x/0fRq08XGNd5t18CSoXpYkTf1llq\n1ha6e5jA6aaHsWihByHM/4buThEefxRGRdVIaw1IMQKBgQDwm6bco4AGwCnJgtO/\nlOdC2EkdPXRvmCeBBqvSN1EBej5Fse+TQqpvZKtnBqVkW5ytUhPXjQpwrPDKDZPw\nv1Bn9B6fvi0Ad9wiQPNy756Z+FfTPGVHpDLDLqm/PpqUoUk4G+K6oQKqoc3IUeRC\ns5aVLEVTTvP+JhoLWwjzf1BrnQKBgQC5xS0Du6jUYyD0dSp/OK4pTlz8l9HITuUx\nwlUfegZr34WJ31yzDzZVmtV9v2KUs4oLtcRq1kt3rjIJoRjr+//gKi/VXjKmHq4A\nZD0VlVsR5/K5PTX+CZ97+eymZ6yFX/teJbmhIR9CA1Ti49ZIpnPSbkKcEYQlH37L\nifCVvmbW2wKBgHC6bF45WDVReQKJgg3jhMpDrVW+wju6jN+dsYjHE/PeQyjCKh3T\ngSi5gLi/W2P+rBRkPRmjYf3SeOohnGuSJujdbi+nmUv73C5MQgNakvNOcE9un4EG\nRCZASZVpjmEOg9B++CY6Y5ZwQoqVG53IqEdxu3VBq30qes9RMotq3dHdAoGAMtmB\nF9t/PBuiQqfrqQVHzvCvTUj1WGIYJIWwLTyGk3KMqA+m3TCVy9rlA1Wm01NNvyTT\nDfd4ktrwwWgCXV4OTTre+wWc0ZHmSR8nBUhrtDwMWZ4isFXL/PCNUYNhWuTJ9pxW\n8n8Rgk1NKAn7dslxPLGHtBarWEoFuAsa+rIyji8CgYEAxzQo7TeLdTM9Wen3wBM2\ndRqXF9JftzZnB7ODxzdJclVuJMtSs3/FFaqeT974IN1It8p+UMowDTYocOOu37qB\niRlOQwiJAsKahrgIHM/H7mANCw0vhgX6Sujau6O2uvEUIFC98KCUEKrVd/iiK+NI\nyrW5MaH2I86IVaFH/VeBihI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-6hyxy@physical-nft.iam.gserviceaccount.com",
+  "client_id": "115660828958902798548",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-6hyxy%40physical-nft.iam.gserviceaccount.com"
+}
