@@ -39,7 +39,7 @@ function Profile() {
               layout='intrinsic'
             />
           </span>
-          <h2 className='text-2xl font-bold mt-2'>@Drake</h2>
+          <h2 className='text-2xl font-bold'>@Drake</h2>
           <div className=''>
             <button
               onClick={copy2Clipboard}
@@ -59,7 +59,7 @@ function Profile() {
               </div>
             </button>
           </div>
-          <div className='flex justify-center text-center text-lg mt-2'>
+          <div className='flex justify-center text-center text-lg mb-4 mt-3'>
             <div className='mr-5 font-semibold'>
               <p>0</p>
               <p className='text-gray-500'>Following</p>
@@ -68,7 +68,6 @@ function Profile() {
               <p>0</p>
               <p className='text-gray-500'>Followers</p>
             </div>
-            <div></div>
           </div>
         </div>
       </div>

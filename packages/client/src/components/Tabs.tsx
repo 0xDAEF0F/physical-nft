@@ -34,10 +34,10 @@ export default function Tabs() {
   })
 
   return (
-    <div className='w-full px-5 '>
+    <div>
       <Tab.Group>
-        <div className='flex justify-center'>
-          <Tab.List className='w-full lg:w-6/12 flex p-1 space-x-1 bg-gray-200 rounded-xl'>
+        <div className='flex justify-center px-5 pb-3'>
+          <Tab.List className='w-full sm:w-7/12 flex p-1 space-x-1 bg-gray-200 rounded-xl'>
             {Object.keys(categories).map((category) => (
               <Tab
                 key={category}
@@ -56,7 +56,7 @@ export default function Tabs() {
             ))}
           </Tab.List>
         </div>
-        <Tab.Panels className='mt-2'>
+        <Tab.Panels>
           {Object.values(categories).map((category, idx) => (
             <Tab.Panel className='focus:outline-none' key={idx}>
               {category}

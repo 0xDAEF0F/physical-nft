@@ -22,7 +22,7 @@ const songExample = {
 
 const NftCard = () => {
   return (
-    <div className='bg-black rounded-lg transform transition duration-500 hover:scale-105 w-fit '>
+    <div className='bg-black rounded-lg transform transition duration-500 hover:scale-105 w-fit'>
       {/* Owner Logo Part */}
       <div key={songExample.id} className='group relative'>
         <div className='flex p-3'>
