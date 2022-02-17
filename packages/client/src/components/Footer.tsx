@@ -7,7 +7,7 @@ function Footer() {
     <footer className='border-t mt-20'>
       <div className='w-full px-6 py-8 flex flex-col md:flex-row'>
         <div className='flex-1 pt-10'>
-          <Logo extraClass={''} />
+          <Logo />
         </div>
         <div className='flex-1 pt-10'>
           <div className='grid gap-2 justify-start'>

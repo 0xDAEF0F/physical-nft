@@ -19,7 +19,7 @@ export default function NavBar() {
   }
 
   const connectWalletOrSignOut = !userJwt ? (
-    <ConnectWallet xClass='hidden lg:flex mx-5' />
+    <ConnectWallet buttonStyling='hidden lg:flex mx-5' />
   ) : (
     <>
       <button
@@ -57,10 +57,10 @@ export default function NavBar() {
       <div className='fixed w-full z-50'>
         <nav className='shadow-md h-16 bg-white'>
           <div className='flex h-full justify-between align-middle ml-5 items-center'>
-            <AppLogo extraClass={''} />
+            <AppLogo />
             <SearchBar
               placeholder='Search songs, albums, artists and accounts'
-              extraClass='hidden sm:flex mx-10 xl:ml-40'
+              className='hidden sm:flex mx-10 xl:ml-40'
             />
             <ul className='hidden lg:flex w-4/12 justify-end'>
               <DivLink

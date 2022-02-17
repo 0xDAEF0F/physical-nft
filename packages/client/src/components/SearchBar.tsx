@@ -1,14 +1,15 @@
+import { HTMLAttributes } from 'react'
 import { MdSearch as SearchSvg } from 'react-icons/md'
 
-type Props = {
+type Props = HTMLAttributes<HTMLDivElement> & {
   placeholder: string
-  extraClass: string
 }
 
-export default function SearchBar({ placeholder, extraClass }: Props) {
+export default function SearchBar({ placeholder, className, ...props }: Props) {
   return (
     <div
-      className={`flex w-full items-center border rounded-full ${extraClass}`}
+      className={`flex w-full items-center border rounded-full ${className}`}
+      {...props}
     >
       <SearchSvg fontSize='25' className='fill-gray-500 ml-2' />
       <input

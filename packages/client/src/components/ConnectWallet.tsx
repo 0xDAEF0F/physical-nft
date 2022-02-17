@@ -27,12 +27,13 @@ import axios, { AxiosError } from 'axios'
 import { logClientErr } from '@/utilities/client-error-handlers'
 import { useAppDispatch } from 'src/app/hooks'
 import { setNewToken } from 'src/features/user/userSlice'
+import Button from './Button'
 
 type Props = {
-  xClass?: string
+  buttonStyling: string
 }
 
-export default function ConnectWallet({ xClass }: Props) {
+export default function ConnectWallet({ buttonStyling }: Props) {
   const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
@@ -102,13 +103,12 @@ export default function ConnectWallet({ xClass }: Props) {
 
   return (
     <>
-      <button
-        type='button'
+      <Button
         onClick={openModal}
-        className={`cursor-pointer bg-blue-600 text-white block px-4 py-2 rounded-full text-base font-medium whitespace-nowrap ${xClass}`}
+        className={`cursor-pointer bg-blue-600 text-white block px-4 py-2 rounded-full text-base font-medium whitespace-nowrap ${buttonStyling}`}
       >
         Connect Wallet
-      </button>
+      </Button>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog

@@ -10,7 +10,6 @@ function HamburguerMenu() {
         <li className='mb-3 sm:hidden'>
           <SearchBar
             placeholder={'Search songs, albums, artists and accounts'}
-            extraClass={''}
           />
         </li>
         <li className='mb-3 lg:hidden'>
@@ -20,7 +19,7 @@ function HamburguerMenu() {
           <DivLinkChevron title={'Stats'} to={'/stats'} xClass='w-full' />
         </li>
         <li className='mb-3 lg:hidden'>
-          <ConnectWallet xClass='w-full' />
+          <ConnectWallet buttonStyling='w-full' />
         </li>
       </ul>
     </nav>

@@ -1,16 +1,10 @@
 import Link from 'next/link'
 import React from 'react'
 
-type Props = {
-  extraClass: string
-}
-
-const Logo = ({ extraClass }: Props) => {
+const Logo = () => {
   return (
     <Link href='/'>
-      <a
-        className={`font-bold text-xl self-center whitespace-nowrap ${extraClass}`}
-      >
+      <a className={`font-bold text-xl self-center whitespace-nowrap`}>
         Physical-<span className='text-blue-500'>NFT</span>
       </a>
     </Link>
