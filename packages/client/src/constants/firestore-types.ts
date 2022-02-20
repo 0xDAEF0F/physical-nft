@@ -17,9 +17,12 @@ type UserDb = {
 }
 
 type ArtistDb = {
-  mbid: string
+  mbid?: string
+  spotifyId?: string
+  description?: string
+  genres?: string[]
   stageName: string
-  playcount: number
+  popularity?: number
   realName?: string
   image: string
   albums?: string[]
@@ -34,7 +37,6 @@ type SongDb = {
   title: string
   duration: number
   artist: string[]
-  genre: string[]
   album: string
   likes?: PublicAddress[]
   image?: string

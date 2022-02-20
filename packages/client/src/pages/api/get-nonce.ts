@@ -13,7 +13,7 @@ import {
   isUserInAuthDb,
   isUserInFirestoreDb,
   updateNonceAndReturnIfSuccess,
-} from '@/lib/server/server-firebase-helpers'
+} from 'src/server/server-firebase-helpers'
 
 export default async function handler(
   req: NextApiRequest,

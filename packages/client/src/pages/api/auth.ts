@@ -13,9 +13,9 @@ import {
   isUserInAuthDb,
   isUserInFirestoreDb,
   updateNonceAndReturnIfSuccess,
-} from '@/lib/server/server-firebase-helpers'
+} from 'src/server/server-firebase-helpers'
 import { utils } from 'ethers'
-import { auth } from '@/lib/server'
+import { auth } from 'src/server'
 import to from 'await-to-js'
 
 export default async function handler(

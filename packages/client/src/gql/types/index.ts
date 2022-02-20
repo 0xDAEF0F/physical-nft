@@ -7,6 +7,7 @@ const typeDefs = [
     realName: String
     isVerified: Boolean!
     albums: [Album!]
+    popularity: Int
     photo: String
     avatar: String
     publicAddress: String
@@ -75,9 +76,11 @@ const typeDefs = [
     getArtist(id: ID!): Artist!
     getAlbum(id: ID!): Album!
     isUserRegistered(publicAddress: String!): Boolean!
-    getNonce(publicAddress: String!): Int!
+    getUserNonce(publicAddress: String!): Int!
     getTopArtists(limit: Int = 10): [Artist!]!
-    getSimilarArtists(artistId: ID!): [Artist!]!
+    getTopArtistsByCountry(country: String!, limit: Int = 10): [Artist!]!
+    getNewReleasesByCountry(country: String!, limit: Int = 10): [Album!]!
+    getRelatedArtists(artistId: ID!): [Artist!]!
   }
 `,
 ]

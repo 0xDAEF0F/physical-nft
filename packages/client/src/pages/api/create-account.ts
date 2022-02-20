@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { auth } from '@/lib/server'
+import { auth } from 'src/server'
 import to from 'await-to-js'
 import {
   createUserNonce,
   isUserInAuthDb,
   isUserInFirestoreDb,
-} from '@/lib/server/server-firebase-helpers'
+} from 'src/server/server-firebase-helpers'
 import { utils } from 'ethers'
 import {
   REQUEST_METHOD_ERR,

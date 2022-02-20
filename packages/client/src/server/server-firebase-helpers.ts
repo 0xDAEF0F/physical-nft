@@ -66,3 +66,11 @@ export async function createArtistsInBatches(artists: ArtistDb[][]) {
   })
   return Promise.all(writeResults)
 }
+
+export async function checkDbForArtistsAndFillInSpotifyInfo() {
+  const artistSnapshot = await db.collection('artists').get()
+  artistSnapshot.forEach((doc) => {
+    const { stageName } = doc.data()
+    // query spotify api for rest of data and other services
+  })
+}
