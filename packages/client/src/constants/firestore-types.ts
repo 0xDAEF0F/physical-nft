@@ -16,20 +16,29 @@ type UserDb = {
   nonce: number
 }
 
+type MetaArtist = {
+  realName?: string
+  description?: string
+  gender?: 'Male' | 'Female'
+  lifeSpan?: {
+    begin: Date
+    end?: Date
+    ended: boolean
+  }
+  nationality?: string
+}
+
 type ArtistDb = {
   mbid?: string
-  spotifyId?: string
-  description?: string
-  genres?: string[]
   stageName: string
+  spotifyId?: string
+  genres?: string[]
   popularity?: number
-  realName?: string
   image: string
   albums?: string[]
   avatar?: string
   isVerified: boolean
-  birthDate?: Date
-  nationality?: string
+  meta: MetaArtist
 }
 
 type SongDb = {

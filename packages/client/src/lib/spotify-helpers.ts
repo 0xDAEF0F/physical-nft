@@ -27,7 +27,7 @@ export async function getSpotifyToken() {
   return ('Bearer ' + res?.data.access_token) as string
 }
 
-export async function queryArtistSpotify(stageName: string) {
+export async function searchArtistSpotify(stageName: string) {
   const searchURL = `${spotifyBaseURL}/search?q=${stageName}&type=artist`
   const [err, res] = await to(
     axios.get<SearchItemRes>(searchURL, {
